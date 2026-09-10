@@ -1,0 +1,117 @@
+{
+  "name": "@omnidev-tools/json-structured-data",
+  "version": "1.0.0",
+  "description": "High-performance, zero-dependency utility package for safe JSON parsing, serialization, diffing, formatting, minifying, validating, flattening, and path operations in Node.js and browsers.",
+  "author": "OmniDev Tools",
+  "license": "MIT",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "bin": {
+    "json-tools": "dist/bin/cli.cjs",
+    "json-format": "dist/bin/cli.cjs",
+    "json-minify": "dist/bin/cli.cjs",
+    "json-validate": "dist/bin/cli.cjs",
+    "json-diff": "dist/bin/cli.cjs",
+    "json-flatten": "dist/bin/cli.cjs",
+    "json-unflatten": "dist/bin/cli.cjs",
+    "json-path": "dist/bin/cli.cjs"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    },
+    "./safe-parse": {
+      "types": "./dist/safe-parse/index.d.ts",
+      "import": "./dist/safe-parse/index.mjs",
+      "require": "./dist/safe-parse/index.cjs"
+    },
+    "./safe-stringify": {
+      "types": "./dist/safe-stringify/index.d.ts",
+      "import": "./dist/safe-stringify/index.mjs",
+      "require": "./dist/safe-stringify/index.cjs"
+    },
+    "./formatter": {
+      "types": "./dist/formatter/index.d.ts",
+      "import": "./dist/formatter/index.mjs",
+      "require": "./dist/formatter/index.cjs"
+    },
+    "./minify": {
+      "types": "./dist/minify/index.d.ts",
+      "import": "./dist/minify/index.mjs",
+      "require": "./dist/minify/index.cjs"
+    },
+    "./validator": {
+      "types": "./dist/validator/index.d.ts",
+      "import": "./dist/validator/index.mjs",
+      "require": "./dist/validator/index.cjs"
+    },
+    "./diff": {
+      "types": "./dist/diff/index.d.ts",
+      "import": "./dist/diff/index.mjs",
+      "require": "./dist/diff/index.cjs"
+    },
+    "./flatten": {
+      "types": "./dist/flatten/index.d.ts",
+      "import": "./dist/flatten/index.mjs",
+      "require": "./dist/flatten/index.cjs"
+    },
+    "./unflatten": {
+      "types": "./dist/unflatten/index.d.ts",
+      "import": "./dist/unflatten/index.mjs",
+      "require": "./dist/unflatten/index.cjs"
+    },
+    "./path": {
+      "types": "./dist/path/index.d.ts",
+      "import": "./dist/path/index.mjs",
+      "require": "./dist/path/index.cjs"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE",
+    "docs"
+  ],
+  "keywords": [
+    "json",
+    "safe-parse",
+    "safe-stringify",
+    "circular-reference",
+    "json-diff",
+    "json-formatter",
+    "json-minify",
+    "json-validator",
+    "json-flatten",
+    "json-unflatten",
+    "json-path",
+    "structured-data",
+    "cli"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "typecheck": "tsc --noEmit",
+    "lint": "tsc --noEmit",
+    "bump:patch": "npm version patch",
+    "bump:minor": "npm version minor",
+    "bump:major": "npm version major",
+    "prepublishOnly": "npm run typecheck && npm run test && npm run build",
+    "publish:dry": "npm publish --dry-run"
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.9",
+    "tsup": "^8.4.0",
+    "typescript": "^5.8.2",
+    "vitest": "^3.0.7",
+    "@vitest/coverage-v8": "^3.0.7"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
