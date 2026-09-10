@@ -1,6 +1,14 @@
 import { defineConfig } from "vitest/config";
+import * as fs from "node:fs";
+
+const packageJson = JSON.parse(
+  fs.readFileSync(new URL("./package.json", import.meta.url), "utf-8")
+);
 
 export default defineConfig({
+  define: {
+    __PACKAGE_VERSION__: JSON.stringify(packageJson.version),
+  },
   test: {
     globals: true,
     environment: "node",

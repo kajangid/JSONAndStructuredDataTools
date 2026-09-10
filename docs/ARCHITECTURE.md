@@ -23,10 +23,13 @@
 ├── docs/                      # Dedicated architectural & usage documentation
 └── src/
     ├── index.ts               # Primary bundle re-exporting all tools
+    ├── index.test.ts          # Root entrypoint & integration test suite
     ├── shared/
     │   ├── types.ts           # JSON primitives and generic types
     │   ├── security.ts        # Prototype pollution guards and safe record factories
-    │   └── parser.ts          # Lexical scanner & syntax error position locator
+    │   ├── security.test.ts   # Security & prototype pollution unit tests
+    │   ├── parser.ts          # Lexical scanner & syntax error position locator
+    │   └── parser.test.ts     # Parser diagnostics & error coordinate tests
     ├── safe-parse/            # json-safe-parse implementation & unit tests
     ├── safe-stringify/        # json-safe-stringify implementation & unit tests
     ├── formatter/             # json-formatter implementation & unit tests
@@ -36,6 +39,8 @@
     ├── flatten/               # json-flatten implementation & unit tests
     ├── unflatten/             # json-unflatten implementation & unit tests
     ├── path/                  # json-path implementation & unit tests
+    ├── version.ts             # Compile-time package version synchronization
+    ├── version.test.ts        # Version synchronization unit test
     └── bin/
         ├── cli.ts             # CLI command runner & argument parser
         └── cli.test.ts        # CLI integration test suite
@@ -69,7 +74,10 @@ Uses a `Set` traversal tracker:
 Recursively explores both left and right objects/arrays:
 - Distinguishes between additions, removals, and modifications.
 - Produces normalized path strings conforming to JavaScript property access notation (e.g. `users[2].address.city`).
-- Computes aggregate change statistics and generates colorized terminal reports.
+### 3.5 Version Synchronization & Single Source of Truth (`version.ts`)
+The package version is maintained strictly in `package.json`:
+- `tsup.config.ts` and `vitest.config.ts` dynamically read `package.json` at build and test time, injecting `__PACKAGE_VERSION__`.
+- The CLI (`src/bin/cli.ts`) and root library exports (`src/index.ts`) consume `VERSION` directly, eliminating any manual file edits when bumping versions.
 
 ---
 

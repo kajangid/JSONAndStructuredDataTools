@@ -10,6 +10,7 @@ import { flattenJson } from '../flatten/index';
 import { unflattenJson } from '../unflatten/index';
 import { getPath } from '../path/index';
 import { safeParse } from '../safe-parse/index';
+import { VERSION } from '../version';
 
 const HELP_TEXT = `
 @omnidev-tools/json-structured-data CLI
@@ -93,13 +94,13 @@ export async function runCli(argv: string[] = process.argv): Promise<number> {
 
   const { positional, flags } = parseFlags(args);
 
-  if (flags['help'] || flags['h'] || (!command && positional.length === 0)) {
-    process.stdout.write(HELP_TEXT);
+  if (flags['version'] || flags['v']) {
+    process.stdout.write(VERSION + '\n');
     return 0;
   }
 
-  if (flags['version'] || flags['v']) {
-    process.stdout.write('1.0.0\n');
+  if (flags['help'] || flags['h'] || (!command && positional.length === 0)) {
+    process.stdout.write(HELP_TEXT);
     return 0;
   }
 

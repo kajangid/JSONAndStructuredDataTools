@@ -19,6 +19,9 @@ npm run bump:minor
 npm run bump:major
 ```
 
+> **Single Source of Truth Automation**:
+> Running `npm run bump:*` only updates `package.json`. You do NOT need to edit source files. During the `prepublishOnly` build, `tsup` reads `package.json` and automatically bakes the bumped version into the compiled library and CLI binaries.
+
 ---
 
 ## 2. Pre-Publish Validation Pipeline
@@ -31,7 +34,7 @@ Before any code is published, npm automatically executes the `prepublishOnly` li
 
 This sequence guarantees that:
 1. TypeScript strict typechecking succeeds without errors (`tsc --noEmit`).
-2. All 80 unit and integration tests pass cleanly (`vitest run`).
+2. All 101 unit and integration tests pass cleanly (`vitest run`).
 3. Fresh dual ESM, CommonJS, and DTS bundles are emitted into `dist/`.
 
 ---

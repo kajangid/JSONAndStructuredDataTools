@@ -48,8 +48,9 @@ npm run typecheck
 | **`shared/security`** | `src/shared/security.test.ts` | 6 | Prototype pollution keys, safe property checking, null-prototype objects |
 | **`shared/parser`** | `src/shared/parser.test.ts` | 11 | Line/column calculations, visual caret error snippets, native message extraction, fallback scanner |
 | **`root entrypoint`** | `src/index.test.ts` | 2 | Package export verification, end-to-end integration workflows across all utilities |
-| **`CLI Executable`** | `src/bin/cli.test.ts` | 7 | `--help`, `format`, `minify`, `validate`, `diff`, `flatten`, `unflatten`, `path`, exit codes |
-| **Total** | **13 files** | **99 tests** | **100% Pass Rate** |
+| **`version constant`** | `src/version.test.ts` | 1 | Dynamic package.json version synchronization validation |
+| **`CLI Executable`** | `src/bin/cli.test.ts` | 8 | `--version`, `-v`, `--help`, `format`, `minify`, `validate`, `diff`, `flatten`, `unflatten`, `path` |
+| **Total** | **14 files** | **101 tests** | **100% Pass Rate** |
 
 ---
 

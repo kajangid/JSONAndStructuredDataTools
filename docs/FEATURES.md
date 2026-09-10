@@ -275,4 +275,20 @@ json-tools path config.json "database.credentials.host"
 # Stdin Piping
 cat data.json | json-tools minify
 cat invalid.json | json-tools validate
+
+# Print Version
+json-tools --version
+json-tools -v
+```
+
+---
+
+## 11. Package Version Constant (`VERSION`)
+
+The package exports a `VERSION` string constant that is automatically synchronized with `package.json`:
+
+```typescript
+import { VERSION } from '@omnidev-tools/json-structured-data';
+
+console.log(VERSION); // e.g. "1.0.0"
 ```

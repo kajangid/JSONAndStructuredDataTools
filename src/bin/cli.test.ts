@@ -29,6 +29,23 @@ describe('CLI executable', () => {
     expect(output).toContain('@omnidev-tools/json-structured-data CLI');
   });
 
+  it('prints version matching package.json when called with --version or -v', async () => {
+    const pkg = JSON.parse(
+      fs.readFileSync(new URL('../../package.json', import.meta.url), 'utf-8')
+    );
+
+    const code = await runCli(['node', 'json-tools', '--version']);
+    expect(code).toBe(0);
+    const output = stdoutMock.mock.calls.map((c) => c[0]).join('');
+    expect(output.trim()).toBe(pkg.version);
+
+    stdoutMock.mockClear();
+    const codeV = await runCli(['node', 'json-tools', '-v']);
+    expect(codeV).toBe(0);
+    const outputV = stdoutMock.mock.calls.map((c) => c[0]).join('');
+    expect(outputV.trim()).toBe(pkg.version);
+  });
+
   it('formats JSON file with format command', async () => {
     const filePath = path.join(tempDir, 'test.json');
     fs.writeFileSync(filePath, '{"b":2,"a":1}');

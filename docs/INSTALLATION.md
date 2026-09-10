@@ -39,6 +39,7 @@ npm install -g @omnidev-tools/json-structured-data
 
 # Or execute on-demand without installation using npx
 npx @omnidev-tools/json-structured-data --help
+npx @omnidev-tools/json-structured-data --version
 npx @omnidev-tools/json-structured-data validate package.json
 npx @omnidev-tools/json-structured-data format input.json --sort-keys
 ```
@@ -61,7 +62,8 @@ import {
   flattenJson,
   unflattenJson,
   getPath,
-  setPath
+  setPath,
+  VERSION,
 } from '@omnidev-tools/json-structured-data';
 ```
 

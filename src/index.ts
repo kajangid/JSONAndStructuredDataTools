@@ -91,3 +91,6 @@ export {
   hasOwn,
   createSafeRecord,
 } from './shared/security';
+
+// Package version
+export { VERSION } from './version';

@@ -1,4 +1,9 @@
 import { defineConfig } from 'tsup';
+import * as fs from 'node:fs';
+
+const packageJson = JSON.parse(
+  fs.readFileSync(new URL('./package.json', import.meta.url), 'utf-8')
+);
 
 export default defineConfig({
   entry: {
@@ -19,6 +24,9 @@ export default defineConfig({
   clean: true,
   sourcemap: true,
   shims: true,
+  define: {
+    __PACKAGE_VERSION__: JSON.stringify(packageJson.version),
+  },
   banner: {
     js: '/* @omnidev-tools/json-structured-data */',
   },

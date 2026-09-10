@@ -44,6 +44,9 @@ describe('package root entrypoint (src/index.ts)', () => {
     expect(typeof IndexExports.isUnsafePropertyKey).toBe('function');
     expect(typeof IndexExports.hasOwn).toBe('function');
     expect(typeof IndexExports.createSafeRecord).toBe('function');
+
+    // Package version
+    expect(typeof IndexExports.VERSION).toBe('string');
   });
 
   it('performs end-to-end integration workflows using root exports', () => {
