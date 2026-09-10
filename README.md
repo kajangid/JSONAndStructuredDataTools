@@ -3,7 +3,7 @@
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.x-blue.svg)](https://www.typescriptlang.org/)
 [![Zero Dependencies](https://img.shields.io/badge/Dependencies-0-brightgreen.svg)]()
 [![Module](https://img.shields.io/badge/Module-ESM%20%7C%20CJS-orange.svg)]()
-[![Tests](https://img.shields.io/badge/Tests-80%20passed-success.svg)]()
+[![Tests](https://img.shields.io/badge/Tests-99%20passed-success.svg)]()
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
 A high-performance, **zero-dependency**, type-safe utility toolkit and CLI for robust JSON and structured data manipulation in Node.js, browsers, and edge environments.

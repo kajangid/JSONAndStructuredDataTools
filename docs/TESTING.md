@@ -45,8 +45,11 @@ npm run typecheck
 | **`json-flatten`** | `src/flatten/index.test.ts` | 7 | Dot notation, custom delimiters, array index flattening, leaf arrays, maxDepth, empty objects/arrays |
 | **`json-unflatten`** | `src/unflatten/index.test.ts` | 6 | Nested reconstruction, array inference, top-level arrays, prototype pollution defense, round-trip test |
 | **`json-path`** | `src/path/index.test.ts` | 13 | Path parsing, safe retrieval, missing fallbacks, falsy value retention, prototype guard, mutable/immutable set/delete |
+| **`shared/security`** | `src/shared/security.test.ts` | 6 | Prototype pollution keys, safe property checking, null-prototype objects |
+| **`shared/parser`** | `src/shared/parser.test.ts` | 11 | Line/column calculations, visual caret error snippets, native message extraction, fallback scanner |
+| **`root entrypoint`** | `src/index.test.ts` | 2 | Package export verification, end-to-end integration workflows across all utilities |
 | **`CLI Executable`** | `src/bin/cli.test.ts` | 7 | `--help`, `format`, `minify`, `validate`, `diff`, `flatten`, `unflatten`, `path`, exit codes |
-| **Total** | **10 files** | **80 tests** | **100% Pass Rate** |
+| **Total** | **13 files** | **99 tests** | **100% Pass Rate** |
 
 ---
 
