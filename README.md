@@ -246,17 +246,17 @@ Dive deeper into our dedicated architecture and operational sub-documents:
 
 ## 🚦 NPM Scripts
 
-| Script                  | Command                 | Purpose                                  |
-| :---------------------- | :---------------------- | :--------------------------------------- |
-| `npm run build`         | `tsup`                  | Build ESM, CommonJS, and DTS bundles     |
-| `npm test`              | `vitest run`            | Run the complete 101-test unit test suite|
-| `npm run test:watch`    | `vitest`                | Run tests in interactive watch mode      |
-| `npm run test:coverage` | `vitest run --coverage` | Generate V8 coverage report              |
-| `npm run typecheck`     | `tsc --noEmit`          | Strict static type validation            |
-| `npm run bump:patch`    | `npm version patch`     | Bump patch version and create Git tag    |
-| `npm run bump:minor`    | `npm version minor`     | Bump minor version and create Git tag    |
-| `npm run bump:major`    | `npm version major`     | Bump major version and create Git tag    |
-| `npm run publish:dry`   | `npm publish --dry-run` | Inspect packaged tarball before shipping |
+| Script                  | Command                 | Purpose                                   |
+| :---------------------- | :---------------------- | :---------------------------------------- |
+| `npm run build`         | `tsup`                  | Build ESM, CommonJS, and DTS bundles      |
+| `npm test`              | `vitest run`            | Run the complete 101-test unit test suite |
+| `npm run test:watch`    | `vitest`                | Run tests in interactive watch mode       |
+| `npm run test:coverage` | `vitest run --coverage` | Generate V8 coverage report               |
+| `npm run typecheck`     | `tsc --noEmit`          | Strict static type validation             |
+| `npm run bump:patch`    | `npm version patch`     | Bump patch version and create Git tag     |
+| `npm run bump:minor`    | `npm version minor`     | Bump minor version and create Git tag     |
+| `npm run bump:major`    | `npm version major`     | Bump major version and create Git tag     |
+| `npm run publish:dry`   | `npm publish --dry-run` | Inspect packaged tarball before shipping  |
 
 ---
 
@@ -265,14 +265,18 @@ Dive deeper into our dedicated architecture and operational sub-documents:
 This repository uses a production-ready, zero-token CI/CD pipeline powered by **GitHub Actions** and **npm Trusted Publishing (OIDC)**.
 
 ### 1. Continuous Integration (CI)
+
 On every pull request and push to `main`/`master`, the [CI workflow](.github/workflows/ci.yml) runs:
+
 1. `npm ci` — Deterministic clean dependency install.
 2. `npm run lint` — Strict TypeScript typechecking (`tsc --noEmit`).
 3. `npm test` — Complete test suite execution (`vitest run`).
 4. `npm run build` — Compilation of ESM, CJS, and DTS bundles.
 
 ### 2. Automated Release & CD (OIDC Trusted Publishing)
+
 Releases are completely automated with zero long-lived static secrets (no `NPM_TOKEN`):
+
 1. **Bump version and push tag**:
    ```bash
    npm version patch   # or minor / major
@@ -300,4 +304,4 @@ All path accessors and unflattening operations contain strict guards against pro
 
 ## 📄 License
 
-[MIT](LICENSE) © 2026 OmniDev Tools
+[MIT](LICENSE) © 2026 Karan Jangid
