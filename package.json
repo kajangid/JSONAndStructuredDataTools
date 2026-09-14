@@ -1,6 +1,6 @@
 {
   "name": "@kjangid/json-tools",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "High-performance, zero-dependency utility package for safe JSON parsing, serialization, diffing, formatting, minifying, validating, flattening, and path operations in Node.js and browsers.",
   "author": "OmniDev Tools",
   "license": "MIT",
