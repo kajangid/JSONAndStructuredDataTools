@@ -28,7 +28,7 @@ export default defineConfig({
     __PACKAGE_VERSION__: JSON.stringify(packageJson.version),
   },
   banner: {
-    js: '/* @omnidev-tools/json-structured-data */',
+    js: '/* @kjangid/json-tools */',
   },
   outExtension({ format }) {
     return {

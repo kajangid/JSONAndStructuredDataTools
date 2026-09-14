@@ -1,12 +1,11 @@
-# @omnidev-tools/json-structured-data
+# @kjangid/json-tools
 
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.x-blue.svg)](tsconfig.json)
 [![Zero Dependencies](https://img.shields.io/badge/Dependencies-0-brightgreen.svg)](package.json)
 [![Module](https://img.shields.io/badge/Module-ESM%20%7C%20CJS-orange.svg)]()
-
-<!-- [![CI Status](https://img.shields.io/badge/CI-Passing-brightgreen.svg)]() -->
-
-[![NPM Version](https://img.shields.io/npm/v/@omnidev-tools/url-and-encoding.svg)]()
+[![CI](https://github.com/kajangid/JSONAndStructuredDataTools/actions/workflows/ci.yml/badge.svg)](https://github.com/kajangid/JSONAndStructuredDataTools/actions/workflows/ci.yml)
+[![Release](https://github.com/kajangid/JSONAndStructuredDataTools/actions/workflows/release.yml/badge.svg)](https://github.com/kajangid/JSONAndStructuredDataTools/actions/workflows/release.yml)
+[![NPM Version](https://img.shields.io/npm/v/@kjangid/json-tools.svg)](https://www.npmjs.com/package/@kjangid/json-tools)
 [![Tests](https://img.shields.io/badge/Tests-101%20passed-success.svg)]()
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![Node](https://img.shields.io/badge/Node-%3E%3D18.0.0-green.svg)](package.json)
@@ -21,7 +20,7 @@ A high-performance, **zero-dependency**, type-safe utility toolkit and CLI for r
 - **Zero Runtime Dependencies**: Ultra-lightweight, zero vulnerability bloat, and minimal bundle footprint.
 - **Isomorphic (Node & Browser)**: Seamlessly works across Node.js (>=18), modern browsers, Cloudflare Workers, Deno, and Bun.
 - **Dual ESM & CommonJS**: Full support for both `import` and `require` with first-class TypeScript `.d.ts` declaration maps.
-- **Granular Subpath Imports**: Import individual tools (`@omnidev-tools/json-structured-data/safe-parse`) for maximum tree-shaking efficiency.
+- **Granular Subpath Imports**: Import individual tools (`@kjangid/json-tools/safe-parse`) for maximum tree-shaking efficiency.
 - **Built-in CLI Executables**: Includes both unified `json-tools <command>` and individual command aliases (`json-format`, `json-minify`, `json-validate`, `json-diff`, etc.).
 - **Security by Default**: Strict prototype pollution defenses against `__proto__`, `constructor`, and `prototype` exploits.
 
@@ -47,16 +46,16 @@ A high-performance, **zero-dependency**, type-safe utility toolkit and CLI for r
 
 ```bash
 # npm
-npm install @omnidev-tools/json-structured-data
+npm install @kjangid/json-tools
 
 # pnpm
-pnpm add @omnidev-tools/json-structured-data
+pnpm add @kjangid/json-tools
 
 # yarn
-yarn add @omnidev-tools/json-structured-data
+yarn add @kjangid/json-tools
 
 # bun
-bun add @omnidev-tools/json-structured-data
+bun add @kjangid/json-tools
 ```
 
 ---
@@ -66,7 +65,7 @@ bun add @omnidev-tools/json-structured-data
 ### 1. `json-safe-parse`
 
 ```typescript
-import { safeParse, safeParseOrDefault } from "@omnidev-tools/json-structured-data/safe-parse";
+import { safeParse, safeParseOrDefault } from "@kjangid/json-tools/safe-parse";
 
 const result = safeParse<{ name: string }>('{"name": "Alice"}');
 if (result.success) {
@@ -82,7 +81,7 @@ const config = safeParseOrDefault("invalid json", { debug: false });
 ### 2. `json-safe-stringify`
 
 ```typescript
-import { safeStringify } from "@omnidev-tools/json-structured-data/safe-stringify";
+import { safeStringify } from "@kjangid/json-tools/safe-stringify";
 
 const obj: any = { name: "Graph" };
 obj.self = obj; // Circular reference
@@ -102,7 +101,7 @@ console.log(safeStringify(payload, 2));
 ### 3. `json-formatter`
 
 ```typescript
-import { formatJson } from "@omnidev-tools/json-structured-data/formatter";
+import { formatJson } from "@kjangid/json-tools/formatter";
 
 // Deterministic key sorting (ideal for git diffs and checksums)
 const formatted = formatJson(payload, {
@@ -116,7 +115,7 @@ console.log(formatted);
 ### 4. `json-minify`
 
 ```typescript
-import { minifyJson } from "@omnidev-tools/json-structured-data/minify";
+import { minifyJson } from "@kjangid/json-tools/minify";
 
 const compact = minifyJson(`{
   "title": "Minified JSON",
@@ -128,7 +127,7 @@ const compact = minifyJson(`{
 ### 5. `json-validator`
 
 ```typescript
-import { validateJson, isValidJson } from "@omnidev-tools/json-structured-data/validator";
+import { validateJson, isValidJson } from "@kjangid/json-tools/validator";
 
 const result = validateJson('{\n  "age": 30,\n}');
 if (!result.valid) {
@@ -144,7 +143,7 @@ if (!result.valid) {
 ### 6. `json-diff`
 
 ```typescript
-import { diffJson, formatDiff } from "@omnidev-tools/json-structured-data/diff";
+import { diffJson, formatDiff } from "@kjangid/json-tools/diff";
 
 const diff = diffJson({ env: "dev", port: 3000, active: true }, { env: "prod", port: 8080 });
 
@@ -159,8 +158,8 @@ console.log(formatDiff(diff, { color: true }));
 ### 7. `json-flatten` & `json-unflatten`
 
 ```typescript
-import { flattenJson } from "@omnidev-tools/json-structured-data/flatten";
-import { unflattenJson } from "@omnidev-tools/json-structured-data/unflatten";
+import { flattenJson } from "@kjangid/json-tools/flatten";
+import { unflattenJson } from "@kjangid/json-tools/unflatten";
 
 const flat = flattenJson({
   user: { profile: { name: "Alice" }, tags: ["admin", "dev"] },
@@ -179,7 +178,7 @@ const original = unflattenJson(flat);
 ### 8. `json-path`
 
 ```typescript
-import { getPath, setPath, hasPath, deletePath } from "@omnidev-tools/json-structured-data/path";
+import { getPath, setPath, hasPath, deletePath } from "@kjangid/json-tools/path";
 
 const store = { users: [{ id: 1, name: "Alice" }] };
 
@@ -195,7 +194,7 @@ const updated = setPath(store, "users[0].role", "Admin", { immutable: true });
 
 ## 💻 CLI Tools
 
-Run via `npx` or install globally (`npm install -g @omnidev-tools/json-structured-data`):
+Run via `npx` or install globally (`npm install -g @kjangid/json-tools`):
 
 ```bash
 # Pretty-print
@@ -250,7 +249,7 @@ Dive deeper into our dedicated architecture and operational sub-documents:
 | Script                  | Command                 | Purpose                                  |
 | :---------------------- | :---------------------- | :--------------------------------------- |
 | `npm run build`         | `tsup`                  | Build ESM, CommonJS, and DTS bundles     |
-| `npm test`              | `vitest run`            | Run the complete 80-test unit test suite |
+| `npm test`              | `vitest run`            | Run the complete 101-test unit test suite|
 | `npm run test:watch`    | `vitest`                | Run tests in interactive watch mode      |
 | `npm run test:coverage` | `vitest run --coverage` | Generate V8 coverage report              |
 | `npm run typecheck`     | `tsc --noEmit`          | Strict static type validation            |
@@ -258,6 +257,35 @@ Dive deeper into our dedicated architecture and operational sub-documents:
 | `npm run bump:minor`    | `npm version minor`     | Bump minor version and create Git tag    |
 | `npm run bump:major`    | `npm version major`     | Bump major version and create Git tag    |
 | `npm run publish:dry`   | `npm publish --dry-run` | Inspect packaged tarball before shipping |
+
+---
+
+## 🚀 CI/CD & Automated Publishing
+
+This repository uses a production-ready, zero-token CI/CD pipeline powered by **GitHub Actions** and **npm Trusted Publishing (OIDC)**.
+
+### 1. Continuous Integration (CI)
+On every pull request and push to `main`/`master`, the [CI workflow](.github/workflows/ci.yml) runs:
+1. `npm ci` — Deterministic clean dependency install.
+2. `npm run lint` — Strict TypeScript typechecking (`tsc --noEmit`).
+3. `npm test` — Complete test suite execution (`vitest run`).
+4. `npm run build` — Compilation of ESM, CJS, and DTS bundles.
+
+### 2. Automated Release & CD (OIDC Trusted Publishing)
+Releases are completely automated with zero long-lived static secrets (no `NPM_TOKEN`):
+1. **Bump version and push tag**:
+   ```bash
+   npm version patch   # or minor / major
+   git push --follow-tags
+   ```
+2. **Release Workflow** ([`.github/workflows/release.yml`](.github/workflows/release.yml)):
+   - Checks out the tagged commit and installs dependencies.
+   - Verifies that the Git tag (`vX.Y.Z`) matches the `package.json` version.
+   - Runs full lint, tests, and compilation.
+   - Publishes to npm using OpenID Connect (OIDC) token exchange with `--provenance`.
+   - Creates a GitHub Release with auto-generated release notes using `gh release create`.
+
+See [Deployment Guide](docs/DEPLOYMENT.md) for one-time npm Trusted Publisher setup instructions.
 
 ---
 

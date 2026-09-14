@@ -1,4 +1,4 @@
-# Limitations & Edge Cases: @omnidev-tools/json-structured-data
+# Limitations & Edge Cases: @kjangid/json-tools
 
 This document outlines architectural boundaries, trade-offs, and operational limitations.
 

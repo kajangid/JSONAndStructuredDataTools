@@ -1,4 +1,4 @@
-# Testing Strategy & Verification: @omnidev-tools/json-structured-data
+# Testing Strategy & Verification: @kjangid/json-tools
 
 Comprehensive testing guide and test suite architecture for the package.
 

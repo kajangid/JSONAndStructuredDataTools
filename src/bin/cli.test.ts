@@ -26,7 +26,7 @@ describe('CLI executable', () => {
     expect(code).toBe(0);
     expect(stdoutMock).toHaveBeenCalled();
     const output = stdoutMock.mock.calls.map((c) => c[0]).join('');
-    expect(output).toContain('@omnidev-tools/json-structured-data CLI');
+    expect(output).toContain('@kjangid/json-tools CLI');
   });
 
   it('prints version matching package.json when called with --version or -v', async () => {

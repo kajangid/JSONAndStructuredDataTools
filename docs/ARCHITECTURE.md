@@ -1,15 +1,15 @@
-# Package Architecture: @omnidev-tools/json-structured-data
+# Package Architecture: @kjangid/json-tools
 
 ## 1. Overview and Core Philosophy
 
-`@omnidev-tools/json-structured-data` is an enterprise-grade, isomorphic, zero-runtime-dependency TypeScript library and CLI toolset designed for safe, deterministic, and high-performance manipulation of JSON and structured data.
+`@kjangid/json-tools` is an enterprise-grade, isomorphic, zero-runtime-dependency TypeScript library and CLI toolset designed for safe, deterministic, and high-performance manipulation of JSON and structured data.
 
 ### Core Architectural Principles
 1. **Zero Runtime Dependencies**: Every utility is built from foundational algorithms without pulling in third-party runtime code. This ensures zero supply-chain risk, instant cold starts, and minimal bundle footprint.
 2. **Security by Default**: Strict prototype pollution defense blocks malicious keys (`__proto__`, `constructor`, `prototype`) across all deep traversal and unflattening paths.
 3. **Isomorphic Compatibility**: Operates seamlessly in Node.js (>=18), modern browsers, Cloudflare Workers, Deno, and Bun.
 4. **Dual Module Output**: Full ESM (`.mjs`) and CommonJS (`.cjs`) support with precise TypeScript `.d.ts` declaration maps.
-5. **Granular Tree-Shaking**: Every utility is exposed as an isolated subpath import (`@omnidev-tools/json-structured-data/safe-parse`), allowing bundlers to package only the exact code used.
+5. **Granular Tree-Shaking**: Every utility is exposed as an isolated subpath import (`@kjangid/json-tools/safe-parse`), allowing bundlers to package only the exact code used.
 
 ---
 

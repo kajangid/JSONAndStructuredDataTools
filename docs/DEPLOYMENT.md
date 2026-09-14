@@ -1,47 +1,135 @@
-# Deployment & Publishing Guide: @omnidev-tools/json-structured-data
+# Deployment & Publishing Guide: @kjangid/json-tools
 
-Step-by-step instructions for version management, local verification, CI/CD automation, and publishing to the NPM registry.
+Comprehensive guide for version management, continuous integration, GitHub Actions release automation with npm Trusted Publishing (OIDC), and package verification.
 
 ---
 
-## 1. Version Bumping Scripts
+## 1. Version Management (Single Source of Truth)
 
-The package includes built-in scripts to bump semantic versions in `package.json` and create corresponding Git tags:
+The package version is maintained strictly in `package.json`. Source code never hardcodes the version number; `tsup` and `vitest` inject it during build and test from `package.json`.
+
+Use standard `npm version` commands to bump the version, commit the change, and create a Git tag in a single atomic step:
 
 ```bash
 # Bump patch version: 1.0.0 -> 1.0.1 (bug fixes)
+npm version patch
+# Or using the npm script:
 npm run bump:patch
 
 # Bump minor version: 1.0.0 -> 1.1.0 (new features, backward compatible)
+npm version minor
+# Or using the npm script:
 npm run bump:minor
 
 # Bump major version: 1.0.0 -> 2.0.0 (breaking changes)
+npm version major
+# Or using the npm script:
 npm run bump:major
 ```
 
-> **Single Source of Truth Automation**:
-> Running `npm run bump:*` only updates `package.json`. You do NOT need to edit source files. During the `prepublishOnly` build, `tsup` reads `package.json` and automatically bakes the bumped version into the compiled library and CLI binaries.
+### Push the Release
+
+Once bumped, push the version commit and newly created tag to GitHub:
+
+```bash
+git push --follow-tags
+```
 
 ---
 
-## 2. Pre-Publish Validation Pipeline
+## 2. Continuous Integration Pipeline (CI)
 
-Before any code is published, npm automatically executes the `prepublishOnly` lifecycle hook:
+Workflow file: [`.github/workflows/ci.yml`](../.github/workflows/ci.yml)
+
+Triggers on:
+- Every push to `main` and `master`
+- Every pull request targeting `main` and `master`
+
+### CI Stages:
+1. **Checkout**: Checks out the branch commit (`actions/checkout@v4`).
+2. **Setup Node.js**: Configures Node.js 22 with dependency caching (`actions/setup-node@v4`).
+3. **Clean Install**: Runs `npm ci` for deterministic dependencies.
+4. **Lint / Typecheck**: Runs `npm run lint` (`tsc --noEmit`) to verify strict static typing.
+5. **Test Suite**: Runs `npm test` (`vitest run`) across all unit and integration test suites.
+6. **Build**: Runs `npm run build` (`tsup`) to verify clean compilation of ESM, CommonJS, and DTS bundles.
+
+---
+
+## 3. Automated Release & CD Pipeline (npm Trusted Publishing via OIDC)
+
+Workflow file: [`.github/workflows/release.yml`](../.github/workflows/release.yml)
+
+Triggers on:
+- Every Git tag push matching `v*` (e.g. `v1.0.1`, `v1.1.0`, `v2.0.0`)
+
+### Key Features:
+- **Zero Secrets**: Uses npm Trusted Publishing via OpenID Connect (OIDC). No long-lived `NPM_TOKEN` or `NODE_AUTH_TOKEN` is required or stored.
+- **Tag vs `package.json` Guard**: Validates that the pushed Git tag exactly matches the version declared in `package.json`. If mismatched, execution halts immediately.
+- **Provenance Attestation**: Publishes with `--provenance` to generate verifiable build attestations on npmjs.com.
+- **GitHub Release**: Automatically creates a GitHub Release with auto-generated changelog notes using the native `gh` CLI.
+
+### Release Workflow Architecture:
+
+```text
+npm version <patch|minor|major>
+            ↓
+git push --follow-tags
+            ↓
+Git tag vX.Y.Z pushed to GitHub
+            ↓
+GitHub Actions: .github/workflows/release.yml
+            ↓
+1. npm ci (Node.js 22)
+2. Verify tag (vX.Y.Z) == package.json (X.Y.Z)
+3. npm run lint && npm test
+4. npm run build
+5. npm publish --access public --provenance (via OIDC)
+6. gh release create vX.Y.Z --generate-notes
+```
+
+---
+
+## 4. One-Time Setup: npm Trusted Publishing
+
+To allow GitHub Actions to publish without static tokens:
+
+1. **Prerequisite**: The package must exist on npmjs.com. If this is a brand new package that has never been published, perform a one-time initial manual publish:
+   ```bash
+   npm login
+   npm publish --access public
+   ```
+2. Go to **[npmjs.com](https://www.npmjs.com)** and navigate to:
+   - **Packages** ➔ `@kjangid/json-tools` ➔ **Settings** tab.
+3. Scroll down to **Trusted Publishers** and click **Add Publisher**.
+4. Select **GitHub Actions** and configure:
+   - **Organization / User**: `kajangid`
+   - **Repository**: `JSONAndStructuredDataTools`
+   - **Workflow filename**: `release.yml`
+   - **Environment**: *(leave blank)*
+5. Click **Add Publisher**.
+
+From this point forward, GitHub Actions publishes automatically and securely using short-lived OIDC tokens.
+
+---
+
+## 5. Pre-Publish Validation Pipeline
+
+Before any code is published, npm automatically executes the `prepublishOnly` lifecycle hook declared in `package.json`:
 
 ```json
 "prepublishOnly": "npm run typecheck && npm run test && npm run build"
 ```
 
-This sequence guarantees that:
-1. TypeScript strict typechecking succeeds without errors (`tsc --noEmit`).
+This guarantees that:
+1. TypeScript static analysis passes without errors (`tsc --noEmit`).
 2. All 101 unit and integration tests pass cleanly (`vitest run`).
 3. Fresh dual ESM, CommonJS, and DTS bundles are emitted into `dist/`.
 
 ---
 
-## 3. Dry-Run Verification
+## 6. Dry-Run Verification
 
-Before publishing to NPM, run a dry-run to inspect the exact files packaged into the tarball:
+Before publishing, you can inspect the exact tarball contents that npm will pack:
 
 ```bash
 npm run publish:dry
@@ -53,66 +141,3 @@ Ensure only required distribution files are included:
 - `LICENSE`
 - `docs/**`
 - `package.json`
-
----
-
-## 4. Manual Publishing Steps
-
-### Step 1: Log in to NPM
-```bash
-npm login
-```
-
-### Step 2: Verify Package Name & Organization
-Since `@omnidev-tools/json-structured-data` is a scoped package, publish with public access:
-
-```bash
-npm publish --access public
-```
-
----
-
-## 5. Automated CI/CD Publishing (GitHub Actions)
-
-Create `.github/workflows/publish.yml` to automatically test, build, and publish releases upon creating a Git tag:
-
-```yaml
-name: Publish Package
-
-on:
-  push:
-    tags:
-      - 'v*'
-
-jobs:
-  publish:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      id-token: write
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          registry-url: 'https://registry.npmjs.org'
-
-      - name: Install Dependencies
-        run: npm ci
-
-      - name: Run Tests & Typecheck
-        run: |
-          npm run typecheck
-          npm test
-
-      - name: Build Package
-        run: npm run build
-
-      - name: Publish to NPM with Provenance
-        run: npm publish --access public --provenance
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-```

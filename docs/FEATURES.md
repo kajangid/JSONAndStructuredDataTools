@@ -1,4 +1,4 @@
-# Feature Guide & API Reference: @omnidev-tools/json-structured-data
+# Feature Guide & API Reference: @kjangid/json-tools
 
 Comprehensive guide for all 9 programmatic tools and CLI commands.
 
@@ -16,7 +16,7 @@ function safeParseOrDefault<T>(input: unknown, defaultValue: T, options?: SafePa
 
 ### Examples
 ```typescript
-import { safeParse, safeParseOrDefault } from '@omnidev-tools/json-structured-data/safe-parse';
+import { safeParse, safeParseOrDefault } from '@kjangid/json-tools/safe-parse';
 
 // Discriminated union handling
 const result = safeParse<{ id: number; name: string }>(rawInput);
@@ -46,7 +46,7 @@ Stringify complex JavaScript structures without throwing on circular references 
 
 ### Examples
 ```typescript
-import { safeStringify } from '@omnidev-tools/json-structured-data/safe-stringify';
+import { safeStringify } from '@kjangid/json-tools/safe-stringify';
 
 const user: any = { name: 'Alice' };
 user.self = user; // Circular reference
@@ -71,7 +71,7 @@ Pretty-print JSON strings or objects with customizable indentation, key sorting,
 
 ### Examples
 ```typescript
-import { formatJson, colorizeJson } from '@omnidev-tools/json-structured-data/formatter';
+import { formatJson, colorizeJson } from '@kjangid/json-tools/formatter';
 
 // Indent 4 spaces with sorted keys
 const formatted = formatJson(payload, {
@@ -95,7 +95,7 @@ Remove extraneous whitespace, newlines, and tabs from JSON payloads while strict
 
 ### Examples
 ```typescript
-import { minifyJson } from '@omnidev-tools/json-structured-data/minify';
+import { minifyJson } from '@kjangid/json-tools/minify';
 
 const compact = minifyJson(`{
   "name": "Hello World",
@@ -112,7 +112,7 @@ Validate JSON syntax compliance according to RFC 8259 and produce visual diagnos
 
 ### Examples
 ```typescript
-import { validateJson, isValidJson, assertValidJson } from '@omnidev-tools/json-structured-data/validator';
+import { validateJson, isValidJson, assertValidJson } from '@kjangid/json-tools/validator';
 
 // 1. Fast boolean check
 if (isValidJson(untrustedString)) { ... }
@@ -140,7 +140,7 @@ Deep structural diff between two JSON objects, arrays, primitives, or raw JSON s
 
 ### Examples
 ```typescript
-import { diffJson, formatDiff } from '@omnidev-tools/json-structured-data/diff';
+import { diffJson, formatDiff } from '@kjangid/json-tools/diff';
 
 const diff = diffJson(
   { env: 'dev', port: 3000, debug: true },
@@ -167,7 +167,7 @@ Flatten deep nested objects and arrays into single-level dot-notation key-value 
 
 ### Examples
 ```typescript
-import { flattenJson } from '@omnidev-tools/json-structured-data/flatten';
+import { flattenJson } from '@kjangid/json-tools/flatten';
 
 const flat = flattenJson({
   user: {
@@ -200,7 +200,7 @@ Automatically ignores and strips `__proto__`, `constructor`, and `prototype` key
 
 ### Examples
 ```typescript
-import { unflattenJson } from '@omnidev-tools/json-structured-data/unflatten';
+import { unflattenJson } from '@kjangid/json-tools/unflatten';
 
 const nested = unflattenJson({
   'server.host': '0.0.0.0',
@@ -223,7 +223,7 @@ Safely read, test, modify, and delete deeply nested properties using dot and bra
 
 ### Examples
 ```typescript
-import { getPath, setPath, hasPath, deletePath } from '@omnidev-tools/json-structured-data/path';
+import { getPath, setPath, hasPath, deletePath } from '@kjangid/json-tools/path';
 
 const db = {
   users: [
@@ -288,7 +288,7 @@ json-tools -v
 The package exports a `VERSION` string constant that is automatically synchronized with `package.json`:
 
 ```typescript
-import { VERSION } from '@omnidev-tools/json-structured-data';
+import { VERSION } from '@kjangid/json-tools';
 
 console.log(VERSION); // e.g. "1.0.0"
 ```

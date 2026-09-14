@@ -1,4 +1,4 @@
-# Installation & Setup Guide: @omnidev-tools/json-structured-data
+# Installation & Setup Guide: @kjangid/json-tools
 
 ## 1. System Requirements
 
@@ -15,16 +15,16 @@ Install via your preferred package manager:
 
 ```bash
 # npm
-npm install @omnidev-tools/json-structured-data
+npm install @kjangid/json-tools
 
 # pnpm
-pnpm add @omnidev-tools/json-structured-data
+pnpm add @kjangid/json-tools
 
 # yarn
-yarn add @omnidev-tools/json-structured-data
+yarn add @kjangid/json-tools
 
 # bun
-bun add @omnidev-tools/json-structured-data
+bun add @kjangid/json-tools
 ```
 
 ---
@@ -35,13 +35,13 @@ To use the standalone CLI tools (`json-tools`, `json-format`, `json-minify`, `js
 
 ```bash
 # Global install with npm
-npm install -g @omnidev-tools/json-structured-data
+npm install -g @kjangid/json-tools
 
 # Or execute on-demand without installation using npx
-npx @omnidev-tools/json-structured-data --help
-npx @omnidev-tools/json-structured-data --version
-npx @omnidev-tools/json-structured-data validate package.json
-npx @omnidev-tools/json-structured-data format input.json --sort-keys
+npx @kjangid/json-tools --help
+npx @kjangid/json-tools --version
+npx @kjangid/json-tools validate package.json
+npx @kjangid/json-tools format input.json --sort-keys
 ```
 
 ---
@@ -64,7 +64,7 @@ import {
   getPath,
   setPath,
   VERSION,
-} from '@omnidev-tools/json-structured-data';
+} from '@kjangid/json-tools';
 ```
 
 ### 4.2 Modular Subpath Imports (Optimized Tree-Shaking)
@@ -72,40 +72,40 @@ For micro-frontends, serverless lambdas, or bundle-sensitive client applications
 
 ```typescript
 // Only loads ~350 bytes of safeParse code
-import { safeParse } from '@omnidev-tools/json-structured-data/safe-parse';
+import { safeParse } from '@kjangid/json-tools/safe-parse';
 
 // Only loads safeStringify
-import { safeStringify } from '@omnidev-tools/json-structured-data/safe-stringify';
+import { safeStringify } from '@kjangid/json-tools/safe-stringify';
 
 // Only loads formatter
-import { formatJson } from '@omnidev-tools/json-structured-data/formatter';
+import { formatJson } from '@kjangid/json-tools/formatter';
 
 // Only loads minify
-import { minifyJson } from '@omnidev-tools/json-structured-data/minify';
+import { minifyJson } from '@kjangid/json-tools/minify';
 
 // Only loads validator
-import { validateJson } from '@omnidev-tools/json-structured-data/validator';
+import { validateJson } from '@kjangid/json-tools/validator';
 
 // Only loads diff engine
-import { diffJson } from '@omnidev-tools/json-structured-data/diff';
+import { diffJson } from '@kjangid/json-tools/diff';
 
 // Only loads flatten
-import { flattenJson } from '@omnidev-tools/json-structured-data/flatten';
+import { flattenJson } from '@kjangid/json-tools/flatten';
 
 // Only loads unflatten
-import { unflattenJson } from '@omnidev-tools/json-structured-data/unflatten';
+import { unflattenJson } from '@kjangid/json-tools/unflatten';
 
 // Only loads json-path accessor
-import { getPath, setPath } from '@omnidev-tools/json-structured-data/path';
+import { getPath, setPath } from '@kjangid/json-tools/path';
 ```
 
 ### 4.3 CommonJS Support
 Native CommonJS environments (`require`) are fully supported out-of-the-box:
 
 ```javascript
-const { safeParse, formatJson } = require('@omnidev-tools/json-structured-data');
+const { safeParse, formatJson } = require('@kjangid/json-tools');
 // Or subpath
-const { validateJson } = require('@omnidev-tools/json-structured-data/validator');
+const { validateJson } = require('@kjangid/json-tools/validator');
 ```
 
 ---

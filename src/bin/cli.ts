@@ -13,7 +13,7 @@ import { safeParse } from '../safe-parse/index';
 import { VERSION } from '../version';
 
 const HELP_TEXT = `
-@omnidev-tools/json-structured-data CLI
+@kjangid/json-tools CLI
 
 Usage:
   json-tools <command> [options] [arguments]
