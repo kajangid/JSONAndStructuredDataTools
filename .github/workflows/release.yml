@@ -52,8 +52,7 @@ jobs:
         run: npm run build
 
       - name: Publish to npm via OIDC
-        run: npm publish --access public
-        # run: npm publish --access public --provenance
+        run: npm publish --access public --provenance
 
       - name: Create GitHub Release
         run: gh release create "$GITHUB_REF_NAME" --title "Release $GITHUB_REF_NAME" --generate-notes
