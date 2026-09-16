@@ -15,7 +15,7 @@ A high-performance, **zero-dependency**, type-safe utility toolkit and CLI for r
 
 ---
 
-## 🚀 Key Features
+## Key Features
 
 - **Zero Runtime Dependencies**: Ultra-lightweight, zero vulnerability bloat, and minimal bundle footprint.
 - **Isomorphic (Node & Browser)**: Seamlessly works across Node.js (>=18), modern browsers, Cloudflare Workers, Deno, and Bun.
@@ -26,7 +26,7 @@ A high-performance, **zero-dependency**, type-safe utility toolkit and CLI for r
 
 ---
 
-## 📦 The 9 Core Utilities
+## The 9 Core Utilities
 
 | Utility                   | Description                                                                                             | Primary Exports                                  |
 | :------------------------ | :------------------------------------------------------------------------------------------------------ | :----------------------------------------------- |
@@ -42,7 +42,7 @@ A high-performance, **zero-dependency**, type-safe utility toolkit and CLI for r
 
 ---
 
-## 🛠 Installation
+## Installation
 
 ```bash
 # npm
@@ -60,7 +60,7 @@ bun add @kjangid/json-tools
 
 ---
 
-## ⚡ Quick Start
+## Quick Start
 
 ### 1. `json-safe-parse`
 
@@ -192,7 +192,7 @@ const updated = setPath(store, "users[0].role", "Admin", { immutable: true });
 
 ---
 
-## 💻 CLI Tools
+## CLI Tools
 
 Run via `npx` or install globally (`npm install -g @kjangid/json-tools`):
 
@@ -231,7 +231,7 @@ json-tools -v
 
 ---
 
-## 📚 Detailed Documentation
+## Detailed Documentation
 
 Dive deeper into our dedicated architecture and operational sub-documents:
 
@@ -244,7 +244,7 @@ Dive deeper into our dedicated architecture and operational sub-documents:
 
 ---
 
-## 🚦 NPM Scripts
+## NPM Scripts
 
 | Script                  | Command                 | Purpose                                   |
 | :---------------------- | :---------------------- | :---------------------------------------- |
@@ -260,7 +260,7 @@ Dive deeper into our dedicated architecture and operational sub-documents:
 
 ---
 
-## 🚀 CI/CD & Automated Publishing
+## CI/CD & Automated Publishing
 
 This repository uses a production-ready, zero-token CI/CD pipeline powered by **GitHub Actions** and **npm Trusted Publishing (OIDC)**.
 
@@ -293,7 +293,7 @@ See [Deployment Guide](docs/DEPLOYMENT.md) for one-time npm Trusted Publisher se
 
 ---
 
-## 🛡 Security
+## Security
 
 All path accessors and unflattening operations contain strict guards against prototype pollution attacks, preventing unwanted mutation of `Object.prototype`:
 
