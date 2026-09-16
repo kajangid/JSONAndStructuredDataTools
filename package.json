@@ -1,6 +1,6 @@
 {
   "name": "@kjangid/json-tools",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "High-performance, zero-dependency utility package for safe JSON parsing, serialization, diffing, formatting, minifying, validating, flattening, and path operations in Node.js and browsers.",
   "author": "Karan Jangid",
   "license": "MIT",
