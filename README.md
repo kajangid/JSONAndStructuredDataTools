@@ -302,6 +302,6 @@ All path accessors and unflattening operations contain strict guards against pro
 
 ---
 
-## 📄 License
+## License
 
 [MIT](LICENSE) © 2026 Karan Jangid
