@@ -1,14 +1,26 @@
 {
   "name": "@kjangid/json-tools",
-  "version": "1.0.4",
+  "version": "1.0.6",
   "description": "High-performance, zero-dependency utility package for safe JSON parsing, serialization, diffing, formatting, minifying, validating, flattening, and path operations in Node.js and browsers.",
-  "author": "OmniDev Tools",
+  "author": "Karan Jangid",
   "license": "MIT",
   "type": "module",
   "sideEffects": false,
   "main": "./dist/index.cjs",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kajangid/JSONAndStructuredDataTools.git"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com",
+    "access": "public"
+  },
+  "bugs": {
+    "url": "https://github.com/kajangid/JSONAndStructuredDataTools/issues"
+  },
+  "homepage": "https://github.com/kajangid/JSONAndStructuredDataTools#readme",
   "bin": {
     "json-tools": "dist/bin/cli.cjs",
     "json-format": "dist/bin/cli.cjs",
@@ -105,6 +117,7 @@
     "prepublishOnly": "npm run typecheck && npm run test && npm run build",
     "publish:dry": "npm publish --dry-run"
   },
+  "dependencies": {},
   "devDependencies": {
     "@types/node": "^22.13.9",
     "tsup": "^8.4.0",
@@ -114,9 +127,5 @@
   },
   "engines": {
     "node": ">=18.0.0"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/kajangid/JSONAndStructuredDataTools.git"
   }
 }
