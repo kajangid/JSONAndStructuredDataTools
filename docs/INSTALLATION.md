@@ -97,6 +97,15 @@ import { unflattenJson } from '@kjangid/json-tools/unflatten';
 
 // Only loads json-path accessor
 import { getPath, setPath } from '@kjangid/json-tools/path';
+
+// Only loads string escape / unescape
+import { escapeJsonString, unescapeJsonString } from '@kjangid/json-tools/escape';
+
+// Only loads sort-keys
+import { sortKeys, sortKeysJson } from '@kjangid/json-tools/sort-keys';
+
+// Only loads jsonl parser & stringifier
+import { parseJsonl, stringifyJsonl } from '@kjangid/json-tools/jsonl';
 ```
 
 ### 4.3 CommonJS Support

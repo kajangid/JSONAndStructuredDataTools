@@ -6,7 +6,7 @@
 [![CI](https://github.com/kajangid/JSONAndStructuredDataTools/actions/workflows/ci.yml/badge.svg)](https://github.com/kajangid/JSONAndStructuredDataTools/actions/workflows/ci.yml)
 [![Release](https://github.com/kajangid/JSONAndStructuredDataTools/actions/workflows/release.yml/badge.svg)](https://github.com/kajangid/JSONAndStructuredDataTools/actions/workflows/release.yml)
 [![NPM Version](https://img.shields.io/npm/v/@kjangid/json-tools.svg)](https://www.npmjs.com/package/@kjangid/json-tools)
-[![Tests](https://img.shields.io/badge/Tests-101%20passed-success.svg)]()
+[![Tests](https://img.shields.io/badge/Tests-126%20passed-success.svg)]()
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![Node](https://img.shields.io/badge/Node-%3E%3D18.0.0-green.svg)](package.json)
 [![Coverage](https://img.shields.io/badge/coverage-96.3%25-brightgreen.svg)](docs/TESTING.md)
@@ -21,12 +21,12 @@ A high-performance, **zero-dependency**, type-safe utility toolkit and CLI for r
 - **Isomorphic (Node & Browser)**: Seamlessly works across Node.js (>=18), modern browsers, Cloudflare Workers, Deno, and Bun.
 - **Dual ESM & CommonJS**: Full support for both `import` and `require` with first-class TypeScript `.d.ts` declaration maps.
 - **Granular Subpath Imports**: Import individual tools (`@kjangid/json-tools/safe-parse`) for maximum tree-shaking efficiency.
-- **Built-in CLI Executables**: Includes both unified `json-tools <command>` and individual command aliases (`json-format`, `json-minify`, `json-validate`, `json-diff`, etc.).
+- **Built-in CLI Executables**: Includes both unified `json-tools <command>` and individual command aliases (`json-format`, `json-minify`, `json-validate`, `json-diff`, `json-escape`, etc.).
 - **Security by Default**: Strict prototype pollution defenses against `__proto__`, `constructor`, and `prototype` exploits.
 
 ---
 
-## The 9 Core Utilities
+## The 12 Core Utilities
 
 | Utility                   | Description                                                                                             | Primary Exports                                  |
 | :------------------------ | :------------------------------------------------------------------------------------------------------ | :----------------------------------------------- |
@@ -39,6 +39,9 @@ A high-performance, **zero-dependency**, type-safe utility toolkit and CLI for r
 | **`json-flatten`**        | Flatten deeply nested objects and arrays into dot notation.                                             | `flattenJson`                                    |
 | **`json-unflatten`**      | Reconstruct nested objects/arrays from dot notation with prototype pollution protection.                | `unflattenJson`                                  |
 | **`json-path`**           | Safely read, test, modify, and delete nested values using dot/bracket paths.                            | `getPath`, `setPath`, `hasPath`, `deletePath`    |
+| **`json-escape`**         | Safely escape string characters for embedding in JSON literals and unescape JSON strings back to raw text. | `escapeJsonString`, `unescapeJsonString`      |
+| **`json-sort-keys`**      | Recursively sort object keys alphabetically or with custom comparator for deterministic hashes and diffs. | `sortKeys`, `sortKeysJson`                  |
+| **`jsonl`**               | Parse, validate, and stringify newline-delimited JSON (JSONL/NDJSON) with line-by-line error reports.    | `parseJsonl`, `stringifyJsonl`, `formatJsonlSummary` |
 
 ---
 
@@ -190,6 +193,39 @@ const fallback = getPath(store, "users[10].name", "Anonymous"); // "Anonymous"
 const updated = setPath(store, "users[0].role", "Admin", { immutable: true });
 ```
 
+### 9. `json-escape`
+
+```typescript
+import { escapeJsonString, unescapeJsonString } from "@kjangid/json-tools/escape";
+
+const escaped = escapeJsonString('hello "world"\nnext line');
+// Output: hello \"world\"\nnext line
+
+const raw = unescapeJsonString(escaped);
+// Output: hello "world"
+```
+
+### 10. `json-sort-keys`
+
+```typescript
+import { sortKeys, sortKeysJson } from "@kjangid/json-tools/sort-keys";
+
+const sorted = sortKeys({ z: 1, a: 2, m: { y: 10, b: 20 } });
+// Output: { a: 2, m: { b: 20, y: 10 }, z: 1 }
+
+const json = sortKeysJson('{"z": 1, "a": 2}', { indent: 2 });
+```
+
+### 11. `jsonl` (Newline-Delimited JSON)
+
+```typescript
+import { parseJsonl, stringifyJsonl, formatJsonlSummary } from "@kjangid/json-tools/jsonl";
+
+const { records, validCount, errors } = parseJsonl('{"id": 1}\n{"id": 2}');
+const output = stringifyJsonl([{ id: 1 }, { id: 2 }]);
+const summary = formatJsonlSummary('{"id": 1}\n{"id": 2}');
+```
+
 ---
 
 ## CLI Tools
@@ -220,6 +256,18 @@ json-tools unflatten flat.json
 # Query Path
 json-tools path data.json "users[0].profile.name"
 
+# Escape & Unescape
+json-tools escape text.txt
+json-tools unescape escaped.txt
+
+# Sort Keys
+json-tools sort-keys data.json --indent=2
+json-sort-keys data.json
+
+# JSONL Inspection
+json-tools jsonl data.jsonl --summary
+jsonl data.jsonl --limit=10
+
 # Stdin Piping
 cat data.json | json-tools minify
 cat invalid.json | json-tools validate
@@ -239,6 +287,7 @@ Dive deeper into our dedicated architecture and operational sub-documents:
 - [Installation & Runtime Support](docs/INSTALLATION.md)
 - [Features & API Reference](docs/FEATURES.md)
 - [Limitations & Operational Boundaries](docs/LIMITATIONS.md)
+- [Future Improvements & Deferred Enhancements](docs/FUTURE_IMPROVEMENTS.md)
 - [Testing Strategy & Test Cases](docs/TESTING.md)
 - [Deployment, Version Bumping & CI/CD](docs/DEPLOYMENT.md)
 
@@ -249,7 +298,7 @@ Dive deeper into our dedicated architecture and operational sub-documents:
 | Script                  | Command                 | Purpose                                   |
 | :---------------------- | :---------------------- | :---------------------------------------- |
 | `npm run build`         | `tsup`                  | Build ESM, CommonJS, and DTS bundles      |
-| `npm test`              | `vitest run`            | Run the complete 101-test unit test suite |
+| `npm test`              | `vitest run`            | Run the complete 126-test unit test suite |
 | `npm run test:watch`    | `vitest`                | Run tests in interactive watch mode       |
 | `npm run test:coverage` | `vitest run --coverage` | Generate V8 coverage report               |
 | `npm run typecheck`     | `tsc --noEmit`          | Strict static type validation             |

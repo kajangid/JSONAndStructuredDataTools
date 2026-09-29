@@ -45,12 +45,15 @@ npm run typecheck
 | **`json-flatten`** | `src/flatten/index.test.ts` | 7 | Dot notation, custom delimiters, array index flattening, leaf arrays, maxDepth, empty objects/arrays |
 | **`json-unflatten`** | `src/unflatten/index.test.ts` | 6 | Nested reconstruction, array inference, top-level arrays, prototype pollution defense, round-trip test |
 | **`json-path`** | `src/path/index.test.ts` | 13 | Path parsing, safe retrieval, missing fallbacks, falsy value retention, prototype guard, mutable/immutable set/delete |
+| **`json-escape`** | `src/escape/index.test.ts` | 6 | Escaping quotes/newlines/unicode, unescaping literals, round-trip fidelity, type guards |
+| **`json-sort-keys`** | `src/sort-keys/index.test.ts` | 8 | Shallow/deep sorting, custom comparator, array preservation, prototype guard, sortKeysJson |
+| **`jsonl`** | `src/jsonl/index.test.ts` | 8 | Valid JSONL parse, blank line skipping, line syntax error reports, maxRecords, stringify, summary |
 | **`shared/security`** | `src/shared/security.test.ts` | 6 | Prototype pollution keys, safe property checking, null-prototype objects |
 | **`shared/parser`** | `src/shared/parser.test.ts` | 11 | Line/column calculations, visual caret error snippets, native message extraction, fallback scanner |
 | **`root entrypoint`** | `src/index.test.ts` | 2 | Package export verification, end-to-end integration workflows across all utilities |
 | **`version constant`** | `src/version.test.ts` | 1 | Dynamic package.json version synchronization validation |
-| **`CLI Executable`** | `src/bin/cli.test.ts` | 8 | `--version`, `-v`, `--help`, `format`, `minify`, `validate`, `diff`, `flatten`, `unflatten`, `path` |
-| **Total** | **14 files** | **101 tests** | **100% Pass Rate** |
+| **`CLI Executable`** | `src/bin/cli.test.ts` | 11 | `--version`, `-v`, `--help`, `format`, `minify`, `validate`, `diff`, `flatten`, `unflatten`, `path`, `escape`, `sort-keys`, `jsonl` |
+| **Total** | **17 files** | **126 tests** | **100% Pass Rate** |
 
 ---
 

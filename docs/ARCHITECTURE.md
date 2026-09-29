@@ -39,6 +39,9 @@
     ├── flatten/               # json-flatten implementation & unit tests
     ├── unflatten/             # json-unflatten implementation & unit tests
     ├── path/                  # json-path implementation & unit tests
+    ├── escape/                # json-escape implementation & unit tests
+    ├── sort-keys/             # json-sort-keys implementation & unit tests
+    ├── jsonl/                 # jsonl implementation & unit tests
     ├── version.ts             # Compile-time package version synchronization
     ├── version.test.ts        # Version synchronization unit test
     └── bin/

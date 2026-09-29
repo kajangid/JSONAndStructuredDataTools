@@ -79,6 +79,30 @@ export {
   type PathOptions,
 } from './path/index';
 
+// 10. json-escape
+export {
+  escapeJsonString,
+  unescapeJsonString,
+} from './escape/index';
+
+// 11. json-sort-keys
+export {
+  sortKeys,
+  sortKeysJson,
+  type SortKeysOptions,
+  type SortKeysJsonOptions,
+} from './sort-keys/index';
+
+// 12. jsonl
+export {
+  parseJsonl,
+  stringifyJsonl,
+  formatJsonlSummary,
+  type JsonlParseResult,
+  type JsonlParseOptions,
+  type JsonlError,
+} from './jsonl/index';
+
 // Shared types and utilities
 export {
   type JsonValue,
@@ -94,3 +118,4 @@ export {
 
 // Package version
 export { VERSION } from './version';
+

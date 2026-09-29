@@ -248,7 +248,60 @@ deletePath(db, 'users[0].profile.title');
 
 ---
 
-## 10. CLI Tool Executable
+## 10. `json-escape`
+
+Safely escape string characters for embedding within JSON string literals and unescape JSON strings back to raw strings.
+
+### Examples
+```typescript
+import { escapeJsonString, unescapeJsonString } from '@kjangid/json-tools/escape';
+
+const escaped = escapeJsonString('Quote: ", Backslash: \\, Newline: \n');
+// "Quote: \\\", Backslash: \\\\, Newline: \\n"
+
+const raw = unescapeJsonString(escaped);
+// "Quote: \", Backslash: \\, Newline: \n"
+```
+
+---
+
+## 11. `json-sort-keys`
+
+Recursively sort keys of an object or JSON string alphabetically or using a custom comparator.
+
+### Examples
+```typescript
+import { sortKeys, sortKeysJson } from '@kjangid/json-tools/sort-keys';
+
+const sorted = sortKeys({ z: 1, a: 2, m: { y: 10, b: 20 } });
+// { a: 2, m: { b: 20, y: 10 }, z: 1 }
+
+// Format directly to sorted JSON string
+const jsonString = sortKeysJson('{"z": 1, "a": 2}', { indent: 2 });
+```
+
+---
+
+## 12. `jsonl` (Newline-Delimited JSON)
+
+Parse, validate, and stringify newline-delimited JSON (NDJSON/JSONL) with granular line error reports.
+
+### Examples
+```typescript
+import { parseJsonl, stringifyJsonl, formatJsonlSummary } from '@kjangid/json-tools/jsonl';
+
+const result = parseJsonl('{"id": 1}\n{"id": 2}\nINVALID');
+console.log(result.validCount); // 2
+console.log(result.errorCount); // 1
+console.log(result.errors[0]?.line); // 3
+
+const text = stringifyJsonl([{ id: 1 }, { id: 2 }]);
+const summary = formatJsonlSummary(text);
+```
+
+---
+
+## 13. CLI Tool Executable
 
 Access utilities directly from your command line:
 
@@ -272,6 +325,18 @@ json-tools unflatten flat.json
 # Path lookup
 json-tools path config.json "database.credentials.host"
 
+# Escape & Unescape
+json-tools escape text.txt
+json-tools unescape escaped.txt
+
+# Sort Keys
+json-tools sort-keys data.json --indent=2
+json-sort-keys data.json
+
+# JSONL inspection
+json-tools jsonl data.jsonl --summary
+jsonl data.jsonl --limit=10
+
 # Stdin Piping
 cat data.json | json-tools minify
 cat invalid.json | json-tools validate
@@ -283,7 +348,7 @@ json-tools -v
 
 ---
 
-## 11. Package Version Constant (`VERSION`)
+## 14. Package Version Constant (`VERSION`)
 
 The package exports a `VERSION` string constant that is automatically synchronized with `package.json`:
 

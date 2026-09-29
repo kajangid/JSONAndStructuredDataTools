@@ -28,7 +28,10 @@
     "json-diff": "dist/bin/cli.cjs",
     "json-flatten": "dist/bin/cli.cjs",
     "json-unflatten": "dist/bin/cli.cjs",
-    "json-path": "dist/bin/cli.cjs"
+    "json-path": "dist/bin/cli.cjs",
+    "json-escape": "dist/bin/cli.cjs",
+    "json-sort-keys": "dist/bin/cli.cjs",
+    "jsonl": "dist/bin/cli.cjs"
   },
   "exports": {
     ".": {
@@ -80,6 +83,21 @@
       "types": "./dist/path/index.d.ts",
       "import": "./dist/path/index.mjs",
       "require": "./dist/path/index.cjs"
+    },
+    "./escape": {
+      "types": "./dist/escape/index.d.ts",
+      "import": "./dist/escape/index.mjs",
+      "require": "./dist/escape/index.cjs"
+    },
+    "./sort-keys": {
+      "types": "./dist/sort-keys/index.d.ts",
+      "import": "./dist/sort-keys/index.mjs",
+      "require": "./dist/sort-keys/index.cjs"
+    },
+    "./jsonl": {
+      "types": "./dist/jsonl/index.d.ts",
+      "import": "./dist/jsonl/index.mjs",
+      "require": "./dist/jsonl/index.cjs"
     }
   },
   "files": [

@@ -43,3 +43,24 @@ This document outlines architectural boundaries, trade-offs, and operational lim
     reviver: (key, val) => (key === 'createdAt' ? new Date(val) : val)
   });
   ```
+
+---
+
+## 7. String Escaping & Unescaping (`json-escape`)
+- **RFC 8259 Standard Conformance**: `escapeJsonString` and `unescapeJsonString` strictly follow RFC 8259 escape rules (`\"`, `\\`, `\/`, `\b`, `\f`, `\n`, `\r`, `\t`, and unicode `\uXXXX`).
+- **Non-Standard & ECMAScript Escapes**: Non-JSON escapes such as vertical tabs (`\v`), null bytes (`\0`), hex byte escapes (`\xHH`), or octal escapes (`\123`) are not automatically converted into valid JSON escape syntax.
+- **HTML Sanitization**: Does not encode HTML entities (`&`, `<`, `>`). If embedding within HTML script tags, additional HTML entity escaping or serializer defenses are recommended.
+
+---
+
+## 8. Recursive Key Sorting (`json-sort-keys`)
+- **Array Value Preservation**: `sortKeys` sorts object properties only. It intentionally preserves array item order as arrays represent ordered sequences where sorting would mutate data semantics.
+- **JavaScript Engine Property Order**: In modern ECMAScript engines (V8, JavaScriptCore), integer index keys (`"0"`, `"1"`, `"42"`) are iterated before string keys regardless of insertion order. For strict alphabetical byte-level ordering in text output, serialize through `sortKeysJson` or `formatJson`.
+- **Special Types**: Map entries, Set elements, and Symbol-keyed properties are not sorted or enumerated.
+
+---
+
+## 9. Newline-Delimited JSON (`jsonl`)
+- **Single-Line Boundary**: Each record must reside entirely on a single physical line. Pretty-printed, multiline JSON blocks within a `.jsonl` file will fail parsing and be recorded as line-level errors.
+- **In-Memory Buffering**: `parseJsonl` processes string inputs in memory. For continuous streaming pipelines or files exceeding available RAM (e.g. >500 MB), use Node.js stream interfaces with line-by-line chunking.
+

@@ -118,4 +118,45 @@ describe('CLI executable', () => {
     const output = stdoutMock.mock.calls.map((c) => c[0]).join('');
     expect(output.trim()).toBe('Bob');
   });
+
+  it('escapes and unescapes strings via CLI', async () => {
+    const filePath = path.join(tempDir, 'escape.txt');
+    fs.writeFileSync(filePath, 'hello "world"');
+
+    const escCode = await runCli(['node', 'json-tools', 'escape', filePath]);
+    expect(escCode).toBe(0);
+    const escOutput = stdoutMock.mock.calls.map((c) => c[0]).join('');
+    expect(escOutput.trim()).toBe('hello \\"world\\"');
+
+    stdoutMock.mockClear();
+    const unescCode = await runCli(['node', 'json-tools', 'unescape', filePath]);
+    expect(unescCode).toBe(0);
+  });
+
+  it('sorts object keys recursively via sort-keys command', async () => {
+    const filePath = path.join(tempDir, 'unsorted.json');
+    fs.writeFileSync(filePath, '{"z": 1, "a": 2}');
+
+    const code = await runCli(['node', 'json-tools', 'sort-keys', filePath]);
+    expect(code).toBe(0);
+    const output = stdoutMock.mock.calls.map((c) => c[0]).join('');
+    expect(output).toContain('"a": 2');
+    expect(output.indexOf('"a"')).toBeLessThan(output.indexOf('"z"'));
+  });
+
+  it('parses and summarizes JSONL files via jsonl command', async () => {
+    const filePath = path.join(tempDir, 'records.jsonl');
+    fs.writeFileSync(filePath, '{"id": 1}\n{"id": 2}');
+
+    const code = await runCli(['node', 'json-tools', 'jsonl', filePath]);
+    expect(code).toBe(0);
+    const output = stdoutMock.mock.calls.map((c) => c[0]).join('');
+    expect(output).toContain('"id": 1');
+
+    stdoutMock.mockClear();
+    const sumCode = await runCli(['node', 'json-tools', 'jsonl', filePath, '--summary']);
+    expect(sumCode).toBe(0);
+    const sumOutput = stdoutMock.mock.calls.map((c) => c[0]).join('');
+    expect(sumOutput).toContain('Valid Records: 2');
+  });
 });

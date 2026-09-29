@@ -58,30 +58,7 @@ export function colorizeJson(json: string): string {
   });
 }
 
-/**
- * Recursively sorts object keys.
- */
-function sortObjectKeys(
-  value: unknown,
-  compareFn: (a: string, b: string) => number
-): unknown {
-  if (value === null || typeof value !== 'object') {
-    return value;
-  }
-
-  if (Array.isArray(value)) {
-    return value.map((item) => sortObjectKeys(item, compareFn));
-  }
-
-  const sortedObj: Record<string, unknown> = {};
-  const keys = Object.keys(value as object).sort(compareFn);
-
-  for (const k of keys) {
-    sortedObj[k] = sortObjectKeys((value as Record<string, unknown>)[k], compareFn);
-  }
-
-  return sortedObj;
-}
+import { sortKeys } from '../sort-keys/index';
 
 /**
  * Pretty-prints a JSON string or JavaScript object with custom indentation, key sorting, and optional colors.
@@ -99,7 +76,7 @@ export function formatJson(input: unknown, options?: FormatJsonOptions): string 
     const compareFn = typeof options.sortKeys === 'function'
       ? options.sortKeys
       : (a: string, b: string) => a.localeCompare(b);
-    data = sortObjectKeys(data, compareFn);
+    data = sortKeys(data, { compareFn });
   }
 
   const formatted = JSON.stringify(data, null, indent);

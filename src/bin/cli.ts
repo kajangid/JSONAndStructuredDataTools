@@ -10,6 +10,9 @@ import { flattenJson } from '../flatten/index';
 import { unflattenJson } from '../unflatten/index';
 import { getPath } from '../path/index';
 import { safeParse } from '../safe-parse/index';
+import { escapeJsonString, unescapeJsonString } from '../escape/index';
+import { sortKeysJson } from '../sort-keys/index';
+import { parseJsonl, formatJsonlSummary } from '../jsonl/index';
 import { VERSION } from '../version';
 
 const HELP_TEXT = `
@@ -28,6 +31,10 @@ Commands:
   unflatten <file>    Rebuild nested object from dot notation
   path <file> <expr>  Safely read nested value by path expression
   parse <file>        Safely parse JSON and output data or error
+  escape <file|text>  Escape string characters for JSON embedding
+  unescape <file|str> Unescape JSON string literal back to raw text
+  sort-keys <file>    Sort object keys recursively (options: --indent=N, --no-deep)
+  jsonl <file>        Inspect and parse JSONL (options: --summary, --limit=N)
 
 Options:
   --help, -h          Show this help message
@@ -84,9 +91,11 @@ export async function runCli(argv: string[] = process.argv): Promise<number> {
   let command = '';
   let args = rawArgs;
 
-  // Detect if invoked via direct binary alias (e.g. json-format, json-minify)
+  // Detect if invoked via direct binary alias (e.g. json-format, json-minify, jsonl)
   if (execName.startsWith('json-') && execName !== 'json-tools') {
     command = execName.replace(/^json-/, '');
+  } else if (execName === 'jsonl') {
+    command = 'jsonl';
   } else if (rawArgs.length > 0 && !rawArgs[0]?.startsWith('-')) {
     command = rawArgs[0]!;
     args = rawArgs.slice(1);
@@ -193,6 +202,40 @@ export async function runCli(argv: string[] = process.argv): Promise<number> {
           process.stderr.write(`Safe parse error: ${result.error.message}\n`);
           return 1;
         }
+      }
+
+      case 'escape': {
+        const input = await getInput(positional[0]);
+        process.stdout.write(escapeJsonString(input) + '\n');
+        return 0;
+      }
+
+      case 'unescape': {
+        const input = await getInput(positional[0]);
+        process.stdout.write(unescapeJsonString(input) + '\n');
+        return 0;
+      }
+
+      case 'sort-keys': {
+        const input = await getInput(positional[0]);
+        const indent = flags['indent'] !== undefined ? parseInt(String(flags['indent']), 10) : 2;
+        const deep = flags['deep'] !== false && flags['no-deep'] !== true;
+        const output = sortKeysJson(input, { indent, deep });
+        process.stdout.write(output + '\n');
+        return 0;
+      }
+
+      case 'jsonl': {
+        const input = await getInput(positional[0]);
+        if (flags['summary']) {
+          const limit = flags['limit'] !== undefined ? parseInt(String(flags['limit']), 10) : 5;
+          process.stdout.write(formatJsonlSummary(input, { limit }) + '\n');
+          return 0;
+        }
+        const limit = flags['limit'] !== undefined ? parseInt(String(flags['limit']), 10) : Infinity;
+        const result = parseJsonl(input, { maxRecords: limit });
+        process.stdout.write(JSON.stringify(result.records, null, 2) + '\n');
+        return result.errorCount > 0 ? 1 : 0;
       }
 
       default: {

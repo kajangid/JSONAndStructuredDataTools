@@ -40,6 +40,19 @@ describe('package root entrypoint (src/index.ts)', () => {
     expect(typeof IndexExports.deletePath).toBe('function');
     expect(typeof IndexExports.parsePath).toBe('function');
 
+    // 10. escape
+    expect(typeof IndexExports.escapeJsonString).toBe('function');
+    expect(typeof IndexExports.unescapeJsonString).toBe('function');
+
+    // 11. sort-keys
+    expect(typeof IndexExports.sortKeys).toBe('function');
+    expect(typeof IndexExports.sortKeysJson).toBe('function');
+
+    // 12. jsonl
+    expect(typeof IndexExports.parseJsonl).toBe('function');
+    expect(typeof IndexExports.stringifyJsonl).toBe('function');
+    expect(typeof IndexExports.formatJsonlSummary).toBe('function');
+
     // Shared security utilities
     expect(typeof IndexExports.isUnsafePropertyKey).toBe('function');
     expect(typeof IndexExports.hasOwn).toBe('function');
