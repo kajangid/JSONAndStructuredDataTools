@@ -53,6 +53,17 @@ describe('package root entrypoint (src/index.ts)', () => {
     expect(typeof IndexExports.stringifyJsonl).toBe('function');
     expect(typeof IndexExports.formatJsonlSummary).toBe('function');
 
+    // 13. merge
+    expect(typeof IndexExports.mergeJson).toBe('function');
+    expect(typeof IndexExports.mergeJsonWithOptions).toBe('function');
+
+    // 14. repair
+    expect(typeof IndexExports.repairJson).toBe('function');
+    expect(typeof IndexExports.safeRepairJson).toBe('function');
+
+    // 15. view
+    expect(typeof IndexExports.renderJsonTree).toBe('function');
+
     // Shared security utilities
     expect(typeof IndexExports.isUnsafePropertyKey).toBe('function');
     expect(typeof IndexExports.hasOwn).toBe('function');

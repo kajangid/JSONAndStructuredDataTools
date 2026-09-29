@@ -64,3 +64,22 @@ This document outlines architectural boundaries, trade-offs, and operational lim
 - **Single-Line Boundary**: Each record must reside entirely on a single physical line. Pretty-printed, multiline JSON blocks within a `.jsonl` file will fail parsing and be recorded as line-level errors.
 - **In-Memory Buffering**: `parseJsonl` processes string inputs in memory. For continuous streaming pipelines or files exceeding available RAM (e.g. >500 MB), use Node.js stream interfaces with line-by-line chunking.
 
+---
+
+## 10. Deep Document Merging (`json-merge`)
+- **Non-Plain Objects & Class Instances**: Deep merging targets plain JSON-compatible objects (`{}`) and arrays. Custom class instances, dates, or complex objects are copied by value or reference rather than deeply traversed.
+- **Array Element Matching**: `arrayMode` strategies (`replace`, `concat`, `union`) operate on array collections as whole units. It does not perform semantic key-matching (e.g. merging objects inside arrays by `id`).
+- **Cyclic Graphs**: `mergeJson` assumes acyclic trees. Merging self-referential circular objects is not supported and will trigger recursion limits.
+
+---
+
+## 11. Heuristic Malformed JSON Repair (`json-repair`)
+- **Heuristic String Regularization**: `repairJson` uses regex and character scanning to fix common developer errors (single quotes, trailing commas, line/block comments, unquoted keys, unclosed braces/brackets). It is not a complete tolerant parser for fundamentally truncated or syntactically invalid data (such as interleaved mismatched brackets like `{"a": [}`).
+- **Escape Normalization**: In strings with complex or conflicting escape sequences, repair regularizes basic quotes and escapes, but does not infer developer intent for malformed Unicode surrogates.
+
+---
+
+## 12. Tree Visualizer (`json-view`)
+- **Terminal UTF-8 Support**: Renders Unicode box-drawing glyphs (`├──`, `└──`, `│   `). On legacy Windows consoles (e.g. standard cmd.exe with code page 437) or ASCII-only terminals, box-drawing characters may appear as replacement symbols unless UTF-8 output (`chcp 65001`) is enabled.
+- **Very Deep Structures**: For deeply nested or massive JSON documents, specify `maxDepth` to avoid flooding terminal buffers.
+

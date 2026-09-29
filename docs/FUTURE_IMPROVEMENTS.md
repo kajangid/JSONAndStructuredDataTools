@@ -38,24 +38,25 @@ Guided by the **Ponytail (lazy senior developer)** principle:
 
 ---
 
-### 1.4 `json-merge` (Phase 2)
-- **Planned Architecture**: Recursive object merger with prototype pollution defense and configurable array resolution (`'replace' | 'concat' | 'union'`).
+### 1.4 `json-merge` (Phase 2 - Implemented)
+- **Current Architecture**: Recursive object merger with prototype pollution defense (`isUnsafePropertyKey`) and configurable array resolution (`'replace' | 'concat' | 'union'`). Deep-clones inputs to avoid mutating originals.
 - **Skipped / Deferred**:
-  - RFC 7396 (JSON Merge Patch) strict compliance mode.
+  - RFC 7396 (JSON Merge Patch) strict compliance mode (null-as-delete semantics).
   - Custom field-level merge resolvers `(targetVal, sourceVal, keyPath) => resolvedVal`.
+  - Merging nested array items by object ID.
 - **Upgrade Trigger**:
-  - Add an RFC 7396 compliant mode or custom conflict callbacks if consumer workflows require fine-grained domain-specific conflict resolution.
+  - Add an RFC 7396 compliant mode or custom conflict callbacks if consumer workflows require fine-grained domain-specific conflict resolution or null-deletion semantics.
 
-### 1.5 `json-repair` (Phase 2)
-- **Planned Architecture**: High-speed, multi-pass regex/string normalizer repairing trailing commas, unquoted keys, single quotes, and JS comments.
+### 1.5 `json-repair` (Phase 2 - Implemented)
+- **Current Architecture**: Multi-pass character scanner and string regularizer. Strips `//` and `/* */` comments without breaking URLs inside strings, normalizes single quotes to double quotes, quotes bare identifier keys, strips trailing commas, and auto-balances open brackets/braces via token stack.
 - **Skipped / Deferred**:
   - Full fault-tolerant PEG/Lezer grammar parser.
-  - Truncated JSON stream auto-closing of arbitrary nested structures.
+  - Auto-correcting heavily mismatched or interleaved syntax (e.g. `{"a": [}`).
 - **Upgrade Trigger**:
-  - Migrate from regex normalizers to a full token-stream state machine only if malformed JSON repair success falls below 98% in production payloads.
+  - Migrate from character regularizers to a full token-stream state machine only if malformed JSON repair success falls below 98% in production payloads.
 
-### 1.6 `json-view` (Phase 2)
-- **Planned Architecture**: Unicode box-drawing tree renderer (`├──`, `└──`, `│   `) for clean terminal stdout output.
+### 1.6 `json-view` (Phase 2 - Implemented)
+- **Current Architecture**: Unicode/ASCII box-drawing tree renderer (`├──`, `└──`, `│   `) with `maxDepth` truncation, typed node annotations (`(Array[N])`, `(Object)`), and ANSI terminal color highlighting. Zero heavy terminal UI dependencies.
 - **Skipped / Deferred**:
   - Interactive terminal TUI with keyboard-driven node collapse/expansion (blessed/ink).
 - **Upgrade Trigger**:

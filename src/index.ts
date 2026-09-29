@@ -103,6 +103,26 @@ export {
   type JsonlError,
 } from './jsonl/index';
 
+// 13. json-merge
+export {
+  mergeJson,
+  mergeJsonWithOptions,
+  type MergeJsonOptions,
+} from './merge/index';
+
+// 14. json-repair
+export {
+  repairJson,
+  safeRepairJson,
+  type SafeRepairResult,
+} from './repair/index';
+
+// 15. json-view
+export {
+  renderJsonTree,
+  type RenderJsonTreeOptions,
+} from './view/index';
+
 // Shared types and utilities
 export {
   type JsonValue,

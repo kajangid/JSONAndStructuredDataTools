@@ -42,6 +42,9 @@
     ├── escape/                # json-escape implementation & unit tests
     ├── sort-keys/             # json-sort-keys implementation & unit tests
     ├── jsonl/                 # jsonl implementation & unit tests
+    ├── merge/                 # json-merge implementation & unit tests
+    ├── repair/                # json-repair implementation & unit tests
+    ├── view/                  # json-view implementation & unit tests
     ├── version.ts             # Compile-time package version synchronization
     ├── version.test.ts        # Version synchronization unit test
     └── bin/
@@ -62,9 +65,9 @@ The internal diagnostic scanner performs character-level lexical analysis when a
 3. It constructs an ASCII context snippet with an arrow indicator (`^`) pointing directly to the offending character.
 
 ### 3.2 Security Layer (`shared/security.ts`)
-Object reconstruction and deep property setting are common vectors for Prototype Pollution attacks. The security layer enforces:
+Object reconstruction, deep merging, and deep property setting are common vectors for Prototype Pollution attacks. The security layer enforces:
 - Explicit blacklisting of `__proto__`, `prototype`, and `constructor`.
-- Prototype pollution guards inside `unflattenJson` and `setPath`.
+- Prototype pollution guards inside `unflattenJson`, `setPath`, and `mergeJson`.
 - Clean prototype-free dictionary creation (`Object.create(null)`).
 
 ### 3.3 Circular Reference & Type Transform Engine (`safe-stringify`)
@@ -77,7 +80,26 @@ Uses a `Set` traversal tracker:
 Recursively explores both left and right objects/arrays:
 - Distinguishes between additions, removals, and modifications.
 - Produces normalized path strings conforming to JavaScript property access notation (e.g. `users[2].address.city`).
-### 3.5 Version Synchronization & Single Source of Truth (`version.ts`)
+
+### 3.5 Deep Merge Engine (`merge`)
+Merges multiple objects recursively with configurable array strategies (`replace`, `concat`, `union`):
+- Defends against prototype poisoning by skipping harmful keys during both object cloning and recursive key assignment.
+- Deep clones all inputs to prevent mutation of the original source objects.
+
+### 3.6 Heuristic Repair Engine (`repair`)
+Multi-pass scanner and string regularizer:
+- Strips `//` line comments and `/* */` block comments outside string literals.
+- Normalizes single-quoted strings into valid JSON double quotes with escape handling.
+- Quotes bare identifier keys (`{ key: "val" }` -> `{ "key": "val" }`).
+- Removes trailing commas before `}` and `]`.
+- Auto-balances missing closing brackets using a token stack tracker.
+
+### 3.7 Tree Visualizer (`view`)
+Transforms complex JSON graphs into Unicode/ASCII box-drawing hierarchies (`├──`, `└──`, `│   `):
+- Traverses nested objects and arrays recursively with configurable `maxDepth` truncation.
+- Applies optional terminal ANSI color codes for keys, strings, numbers, booleans, and nulls.
+
+### 3.8 Version Synchronization & Single Source of Truth (`version.ts`)
 The package version is maintained strictly in `package.json`:
 - `tsup.config.ts` and `vitest.config.ts` dynamically read `package.json` at build and test time, injecting `__PACKAGE_VERSION__`.
 - The CLI (`src/bin/cli.ts`) and root library exports (`src/index.ts`) consume `VERSION` directly, eliminating any manual file edits when bumping versions.

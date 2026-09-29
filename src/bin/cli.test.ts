@@ -159,4 +159,46 @@ describe('CLI executable', () => {
     const sumOutput = stdoutMock.mock.calls.map((c) => c[0]).join('');
     expect(sumOutput).toContain('Valid Records: 2');
   });
+
+  it('merges JSON files via merge command and alias', async () => {
+    const f1 = path.join(tempDir, 'm1.json');
+    const f2 = path.join(tempDir, 'm2.json');
+    fs.writeFileSync(f1, '{"a": 1, "items": [1]}');
+    fs.writeFileSync(f2, '{"b": 2, "items": [2]}');
+
+    const code = await runCli(['node', 'json-tools', 'merge', f1, f2, '--arrays=concat']);
+    expect(code).toBe(0);
+    const output = stdoutMock.mock.calls.map((c) => c[0]).join('');
+    expect(output).toContain('"a": 1');
+    expect(output).toContain('"b": 2');
+    const parsed = JSON.parse(output);
+    expect(parsed.items).toEqual([1, 2]);
+
+    stdoutMock.mockClear();
+    const aliasCode = await runCli(['node', 'json-merge', f1, f2]);
+    expect(aliasCode).toBe(0);
+  });
+
+  it('repairs malformed JSON via repair command', async () => {
+    const filePath = path.join(tempDir, 'broken.json');
+    fs.writeFileSync(filePath, "{ 'name': 'test', }");
+
+    const code = await runCli(['node', 'json-tools', 'repair', filePath]);
+    expect(code).toBe(0);
+    const output = stdoutMock.mock.calls.map((c) => c[0]).join('');
+    expect(JSON.parse(output.trim())).toEqual({ name: 'test' });
+  });
+
+  it('renders ASCII tree via view command', async () => {
+    const filePath = path.join(tempDir, 'tree.json');
+    fs.writeFileSync(filePath, '{"user": {"name": "Alice"}}');
+
+    const code = await runCli(['node', 'json-tools', 'view', filePath]);
+    expect(code).toBe(0);
+    const output = stdoutMock.mock.calls.map((c) => c[0]).join('');
+    expect(output).toContain('root');
+    expect(output).toContain('user');
+    expect(output).toContain('name');
+    expect(output).toContain('Alice');
+  });
 });

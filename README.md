@@ -6,7 +6,7 @@
 [![CI](https://github.com/kajangid/JSONAndStructuredDataTools/actions/workflows/ci.yml/badge.svg)](https://github.com/kajangid/JSONAndStructuredDataTools/actions/workflows/ci.yml)
 [![Release](https://github.com/kajangid/JSONAndStructuredDataTools/actions/workflows/release.yml/badge.svg)](https://github.com/kajangid/JSONAndStructuredDataTools/actions/workflows/release.yml)
 [![NPM Version](https://img.shields.io/npm/v/@kjangid/json-tools.svg)](https://www.npmjs.com/package/@kjangid/json-tools)
-[![Tests](https://img.shields.io/badge/Tests-126%20passed-success.svg)]()
+[![Tests](https://img.shields.io/badge/Tests-151%20passed-success.svg)]()
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![Node](https://img.shields.io/badge/Node-%3E%3D18.0.0-green.svg)](package.json)
 [![Coverage](https://img.shields.io/badge/coverage-96.3%25-brightgreen.svg)](docs/TESTING.md)
@@ -21,12 +21,12 @@ A high-performance, **zero-dependency**, type-safe utility toolkit and CLI for r
 - **Isomorphic (Node & Browser)**: Seamlessly works across Node.js (>=18), modern browsers, Cloudflare Workers, Deno, and Bun.
 - **Dual ESM & CommonJS**: Full support for both `import` and `require` with first-class TypeScript `.d.ts` declaration maps.
 - **Granular Subpath Imports**: Import individual tools (`@kjangid/json-tools/safe-parse`) for maximum tree-shaking efficiency.
-- **Built-in CLI Executables**: Includes both unified `json-tools <command>` and individual command aliases (`json-format`, `json-minify`, `json-validate`, `json-diff`, `json-escape`, etc.).
+- **Built-in CLI Executables**: Includes both unified `json-tools <command>` and individual command aliases (`json-format`, `json-minify`, `json-validate`, `json-diff`, `json-merge`, `json-repair`, `json-view`, etc.).
 - **Security by Default**: Strict prototype pollution defenses against `__proto__`, `constructor`, and `prototype` exploits.
 
 ---
 
-## The 12 Core Utilities
+## The 15 Core Utilities
 
 | Utility                   | Description                                                                                             | Primary Exports                                  |
 | :------------------------ | :------------------------------------------------------------------------------------------------------ | :----------------------------------------------- |
@@ -42,6 +42,9 @@ A high-performance, **zero-dependency**, type-safe utility toolkit and CLI for r
 | **`json-escape`**         | Safely escape string characters for embedding in JSON literals and unescape JSON strings back to raw text. | `escapeJsonString`, `unescapeJsonString`      |
 | **`json-sort-keys`**      | Recursively sort object keys alphabetically or with custom comparator for deterministic hashes and diffs. | `sortKeys`, `sortKeysJson`                  |
 | **`jsonl`**               | Parse, validate, and stringify newline-delimited JSON (JSONL/NDJSON) with line-by-line error reports.    | `parseJsonl`, `stringifyJsonl`, `formatJsonlSummary` |
+| **`json-merge`**          | Deep-merge JSON documents with configurable array strategies (`replace`, `concat`, `union`) and pollution guards. | `mergeJson`, `mergeJsonWithOptions`             |
+| **`json-repair`**         | Fix trailing commas, quotes, unquoted keys, line/block comments, and unclosed brackets.                 | `repairJson`, `safeRepairJson`                   |
+| **`json-view`**           | Render JSON data structures as Unicode/ASCII box-drawing trees with optional ANSI color highlighting.    | `renderJsonTree`                                 |
 
 ---
 
@@ -226,6 +229,64 @@ const output = stringifyJsonl([{ id: 1 }, { id: 2 }]);
 const summary = formatJsonlSummary('{"id": 1}\n{"id": 2}');
 ```
 
+### 12. `json-merge`
+
+```typescript
+import { mergeJson, mergeJsonWithOptions } from "@kjangid/json-tools/merge";
+
+const merged = mergeJson(
+  { env: "dev", db: { host: "localhost", port: 5432 } },
+  { env: "prod", db: { host: "db.internal" } }
+);
+// Output: { env: "prod", db: { host: "db.internal", port: 5432 } }
+
+// Array conflict resolution: 'replace' | 'concat' | 'union'
+const unionMerged = mergeJsonWithOptions(
+  { arrayMode: 'union' },
+  { tags: ['node', 'js'] },
+  { tags: ['ts', 'node'] }
+);
+// Output: { tags: ['node', 'js', 'ts'] }
+```
+
+### 13. `json-repair`
+
+```typescript
+import { repairJson, safeRepairJson } from "@kjangid/json-tools/repair";
+
+// Fixes single quotes, trailing commas, line/block comments, unquoted keys, unclosed braces
+const broken = "{ name: 'Alice', tags: ['dev',], /* comment */ }";
+const valid = repairJson(broken);
+// Output: '{\n  "name": "Alice",\n  "tags": [\n    "dev"\n  ]\n}'
+
+const result = safeRepairJson(broken);
+if (result.success) {
+  console.log(result.data); // { name: 'Alice', tags: ['dev'] }
+}
+```
+
+### 14. `json-view`
+
+```typescript
+import { renderJsonTree } from "@kjangid/json-tools/view";
+
+const tree = renderJsonTree({
+  app: "api",
+  routes: ["/users", "/health"],
+  db: { pool: 10 }
+});
+console.log(tree);
+/*
+root
+├── app: "api"
+├── routes (Array[2])
+│   ├── [0]: "/users"
+│   └── [1]: "/health"
+└── db (Object)
+    └── pool: 10
+*/
+```
+
 ---
 
 ## CLI Tools
@@ -268,6 +329,18 @@ json-sort-keys data.json
 json-tools jsonl data.jsonl --summary
 jsonl data.jsonl --limit=10
 
+# Deep Merge
+json-tools merge base.json override.json --arrays=union
+json-merge base.json override.json
+
+# Repair Malformed JSON
+json-tools repair broken.json > fixed.json
+json-repair broken.json
+
+# Visual ASCII Tree View
+json-tools view data.json --depth=3 --color
+json-view data.json
+
 # Stdin Piping
 cat data.json | json-tools minify
 cat invalid.json | json-tools validate
@@ -298,7 +371,7 @@ Dive deeper into our dedicated architecture and operational sub-documents:
 | Script                  | Command                 | Purpose                                   |
 | :---------------------- | :---------------------- | :---------------------------------------- |
 | `npm run build`         | `tsup`                  | Build ESM, CommonJS, and DTS bundles      |
-| `npm test`              | `vitest run`            | Run the complete 126-test unit test suite |
+| `npm test`              | `vitest run`            | Run the complete 151-test unit test suite |
 | `npm run test:watch`    | `vitest`                | Run tests in interactive watch mode       |
 | `npm run test:coverage` | `vitest run --coverage` | Generate V8 coverage report               |
 | `npm run typecheck`     | `tsc --noEmit`          | Strict static type validation             |

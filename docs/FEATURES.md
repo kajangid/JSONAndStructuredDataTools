@@ -301,7 +301,85 @@ const summary = formatJsonlSummary(text);
 
 ---
 
-## 13. CLI Tool Executable
+## 13. `json-merge`
+
+Deep-merge JSON documents with configurable array conflict strategies and prototype pollution safeguards.
+
+### Examples
+```typescript
+import { mergeJson, mergeJsonWithOptions } from '@kjangid/json-tools/merge';
+
+const base = { env: 'dev', server: { port: 3000, host: 'localhost' } };
+const override = { env: 'prod', server: { host: 'api.domain.com' } };
+
+const merged = mergeJson(base, override);
+// { env: 'prod', server: { port: 3000, host: 'api.domain.com' } }
+
+// Configurable array strategy: 'replace' | 'concat' | 'union'
+const unionMerged = mergeJsonWithOptions(
+  { arrayMode: 'union' },
+  { tags: ['node', 'js'] },
+  { tags: ['ts', 'node'] }
+);
+// { tags: ['node', 'js', 'ts'] }
+```
+
+---
+
+## 14. `json-repair`
+
+Heuristically repair broken or malformed JSON text containing single quotes, trailing commas, line/block comments, unquoted keys, and unclosed brackets.
+
+### Examples
+```typescript
+import { repairJson, safeRepairJson } from '@kjangid/json-tools/repair';
+
+// Trailing commas, single quotes, comments, unquoted keys
+const malformed = "{ name: 'Alice', active: true, /* note */ }";
+const fixed = repairJson(malformed);
+// '{\n  "name": "Alice",\n  "active": true\n}'
+
+// Safe execution wrapper returning status and typed data
+const result = safeRepairJson<{ name: string }>(malformed);
+if (result.success) {
+  console.log(result.data.name); // "Alice"
+} else {
+  console.error(result.error);
+}
+```
+
+---
+
+## 15. `json-view`
+
+Render JSON data or parsed objects as a clear ASCII/Unicode box-drawing tree (`├──`, `└──`, `│   `) with configurable depth and terminal color highlighting.
+
+### Examples
+```typescript
+import { renderJsonTree } from '@kjangid/json-tools/view';
+
+const tree = renderJsonTree({
+  app: 'payment-service',
+  endpoints: ['/pay', '/refund'],
+  metrics: { enabled: true, rate: 100 }
+}, { maxDepth: 2, colors: true });
+
+console.log(tree);
+/*
+root
+├── app: "payment-service"
+├── endpoints (Array[2])
+│   ├── [0]: "/pay"
+│   └── [1]: "/refund"
+└── metrics (Object)
+    ├── enabled: true
+    └── rate: 100
+*/
+```
+
+---
+
+## 16. CLI Tool Executable
 
 Access utilities directly from your command line:
 
@@ -337,6 +415,18 @@ json-sort-keys data.json
 json-tools jsonl data.jsonl --summary
 jsonl data.jsonl --limit=10
 
+# Deep Merge
+json-tools merge base.json patch.json --arrays=union
+json-merge base.json patch.json
+
+# Repair Malformed JSON
+json-tools repair broken.json > fixed.json
+json-repair broken.json
+
+# ASCII Tree View
+json-tools view complex.json --depth=3 --color
+json-view complex.json
+
 # Stdin Piping
 cat data.json | json-tools minify
 cat invalid.json | json-tools validate
@@ -348,7 +438,7 @@ json-tools -v
 
 ---
 
-## 14. Package Version Constant (`VERSION`)
+## 17. Package Version Constant (`VERSION`)
 
 The package exports a `VERSION` string constant that is automatically synchronized with `package.json`:
 

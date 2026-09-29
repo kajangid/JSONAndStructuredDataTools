@@ -13,6 +13,9 @@ import { safeParse } from '../safe-parse/index';
 import { escapeJsonString, unescapeJsonString } from '../escape/index';
 import { sortKeysJson } from '../sort-keys/index';
 import { parseJsonl, formatJsonlSummary } from '../jsonl/index';
+import { mergeJsonWithOptions } from '../merge/index';
+import { repairJson } from '../repair/index';
+import { renderJsonTree } from '../view/index';
 import { VERSION } from '../version';
 
 const HELP_TEXT = `
@@ -35,6 +38,9 @@ Commands:
   unescape <file|str> Unescape JSON string literal back to raw text
   sort-keys <file>    Sort object keys recursively (options: --indent=N, --no-deep)
   jsonl <file>        Inspect and parse JSONL (options: --summary, --limit=N)
+  merge <f1> <f2...>  Deep-merge multiple JSON files (options: --arrays=replace|concat|union)
+  repair <file>       Repair malformed JSON (trailing commas, quotes, unclosed brackets)
+  view <file>         Render JSON as an ASCII tree (options: --depth=N, --color)
 
 Options:
   --help, -h          Show this help message
@@ -236,6 +242,40 @@ export async function runCli(argv: string[] = process.argv): Promise<number> {
         const result = parseJsonl(input, { maxRecords: limit });
         process.stdout.write(JSON.stringify(result.records, null, 2) + '\n');
         return result.errorCount > 0 ? 1 : 0;
+      }
+
+      case 'merge': {
+        if (positional.length < 2) {
+          process.stderr.write('Error: merge requires at least two file arguments: json-merge <file1> <file2> [file3...]\n');
+          return 2;
+        }
+        const docs = positional.map((p) => {
+          const content = fs.readFileSync(path.resolve(process.cwd(), p), 'utf-8');
+          return JSON.parse(content);
+        });
+        const arrayFlag = flags['arrays'] || flags['arrayMode'] || flags['array-mode'];
+        const arrayMode = (typeof arrayFlag === 'string' && ['replace', 'concat', 'union'].includes(arrayFlag))
+          ? (arrayFlag as 'replace' | 'concat' | 'union')
+          : 'replace';
+        const merged = mergeJsonWithOptions({ arrayMode }, docs[0], ...docs.slice(1));
+        process.stdout.write(JSON.stringify(merged, null, 2) + '\n');
+        return 0;
+      }
+
+      case 'repair': {
+        const input = await getInput(positional[0]);
+        const repaired = repairJson(input);
+        process.stdout.write(repaired + '\n');
+        return 0;
+      }
+
+      case 'view': {
+        const input = await getInput(positional[0]);
+        const maxDepth = flags['depth'] !== undefined ? parseInt(String(flags['depth']), 10) : undefined;
+        const colors = flags['color'] === true;
+        const tree = renderJsonTree(input, { maxDepth, colors });
+        process.stdout.write(tree + '\n');
+        return 0;
       }
 
       default: {

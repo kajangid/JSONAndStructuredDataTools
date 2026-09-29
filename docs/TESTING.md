@@ -48,12 +48,15 @@ npm run typecheck
 | **`json-escape`** | `src/escape/index.test.ts` | 6 | Escaping quotes/newlines/unicode, unescaping literals, round-trip fidelity, type guards |
 | **`json-sort-keys`** | `src/sort-keys/index.test.ts` | 8 | Shallow/deep sorting, custom comparator, array preservation, prototype guard, sortKeysJson |
 | **`jsonl`** | `src/jsonl/index.test.ts` | 8 | Valid JSONL parse, blank line skipping, line syntax error reports, maxRecords, stringify, summary |
+| **`json-merge`** | `src/merge/index.test.ts` | 8 | Deep merging, array modes (replace, concat, union), prototype pollution guard, multi-source merging |
+| **`json-repair`** | `src/repair/index.test.ts` | 8 | Trailing commas, single quotes, unquoted keys, line/block comments, auto-balancing brackets, safeRepairJson |
+| **`json-view`** | `src/view/index.test.ts` | 6 | Box-drawing tree rendering, maxDepth truncation, ANSI terminal color toggles, root labels |
 | **`shared/security`** | `src/shared/security.test.ts` | 6 | Prototype pollution keys, safe property checking, null-prototype objects |
 | **`shared/parser`** | `src/shared/parser.test.ts` | 11 | Line/column calculations, visual caret error snippets, native message extraction, fallback scanner |
 | **`root entrypoint`** | `src/index.test.ts` | 2 | Package export verification, end-to-end integration workflows across all utilities |
 | **`version constant`** | `src/version.test.ts` | 1 | Dynamic package.json version synchronization validation |
-| **`CLI Executable`** | `src/bin/cli.test.ts` | 11 | `--version`, `-v`, `--help`, `format`, `minify`, `validate`, `diff`, `flatten`, `unflatten`, `path`, `escape`, `sort-keys`, `jsonl` |
-| **Total** | **17 files** | **126 tests** | **100% Pass Rate** |
+| **`CLI Executable`** | `src/bin/cli.test.ts` | 14 | `--version`, `-v`, `--help`, `format`, `minify`, `validate`, `diff`, `flatten`, `unflatten`, `path`, `escape`, `sort-keys`, `jsonl`, `merge`, `repair`, `view` |
+| **Total** | **20 files** | **151 tests** | **100% Pass Rate** |
 
 ---
 

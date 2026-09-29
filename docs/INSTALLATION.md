@@ -31,7 +31,7 @@ bun add @kjangid/json-tools
 
 ## 3. Global Installation for CLI Usage
 
-To use the standalone CLI tools (`json-tools`, `json-format`, `json-minify`, `json-validate`, `json-diff`, `json-flatten`, `json-unflatten`, `json-path`) globally in your terminal:
+To use the standalone CLI tools (`json-tools`, `json-format`, `json-minify`, `json-validate`, `json-diff`, `json-flatten`, `json-unflatten`, `json-path`, `json-escape`, `json-sort-keys`, `jsonl`, `json-merge`, `json-repair`, `json-view`) globally in your terminal:
 
 ```bash
 # Global install with npm
@@ -42,6 +42,7 @@ npx @kjangid/json-tools --help
 npx @kjangid/json-tools --version
 npx @kjangid/json-tools validate package.json
 npx @kjangid/json-tools format input.json --sort-keys
+npx @kjangid/json-tools repair broken.json
 ```
 
 ---
@@ -63,6 +64,13 @@ import {
   unflattenJson,
   getPath,
   setPath,
+  escapeJsonString,
+  unescapeJsonString,
+  sortKeys,
+  parseJsonl,
+  mergeJson,
+  repairJson,
+  renderJsonTree,
   VERSION,
 } from '@kjangid/json-tools';
 ```
@@ -106,6 +114,15 @@ import { sortKeys, sortKeysJson } from '@kjangid/json-tools/sort-keys';
 
 // Only loads jsonl parser & stringifier
 import { parseJsonl, stringifyJsonl } from '@kjangid/json-tools/jsonl';
+
+// Only loads deep merge
+import { mergeJson, mergeJsonWithOptions } from '@kjangid/json-tools/merge';
+
+// Only loads repair
+import { repairJson, safeRepairJson } from '@kjangid/json-tools/repair';
+
+// Only loads tree view
+import { renderJsonTree } from '@kjangid/json-tools/view';
 ```
 
 ### 4.3 CommonJS Support
