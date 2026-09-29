@@ -53,12 +53,14 @@ npm run typecheck
 | **`json-view`** | `src/view/index.test.ts` | 6 | Box-drawing tree rendering, maxDepth truncation, ANSI terminal color toggles, root labels |
 | **`json-patch`** | `src/patch/index.test.ts` | 8 | Pointer escaping, patch generation (objects, arrays), apply (add, remove, replace, move, copy, test), prototype defense |
 | **`jsonpath-test`** | `src/jsonpath/index.test.ts` | 10 | Dot & bracket queries, indices, negative offsets, slicing, wildcards, recursive descent, unions, compiled queries, testJsonPath |
+| **`json-schema-generate`** | `src/schema-generate/index.test.ts` | 7 | Type inference, object properties, polymorphic arrays, union types, requiredAll, prototype safety |
+| **`json-schema-validate`** | `src/schema-validate/index.test.ts` | 7 | Type validation, required keys, numeric/string/array constraints, regex patterns, enums, assertValidSchema |
 | **`shared/security`** | `src/shared/security.test.ts` | 6 | Prototype pollution keys, safe property checking, null-prototype objects |
 | **`shared/parser`** | `src/shared/parser.test.ts` | 11 | Line/column calculations, visual caret error snippets, native message extraction, fallback scanner |
 | **`root entrypoint`** | `src/index.test.ts` | 2 | Package export verification, end-to-end integration workflows across all utilities |
 | **`version constant`** | `src/version.test.ts` | 1 | Dynamic package.json version synchronization validation |
-| **`CLI Executable`** | `src/bin/cli.test.ts` | 16 | `--version`, `-v`, `--help`, `format`, `minify`, `validate`, `diff`, `flatten`, `unflatten`, `path`, `escape`, `sort-keys`, `jsonl`, `merge`, `repair`, `view`, `patch`, `jsonpath` |
-| **Total** | **22 files** | **171 tests** | **100% Pass Rate** |
+| **`CLI Executable`** | `src/bin/cli.test.ts` | 17 | `--version`, `-v`, `--help`, `format`, `minify`, `validate`, `diff`, `flatten`, `unflatten`, `path`, `escape`, `sort-keys`, `jsonl`, `merge`, `repair`, `view`, `patch`, `jsonpath`, `schema-gen`, `schema-val` |
+| **Total** | **24 files** | **186 tests** | **100% Pass Rate** |
 
 ---
 

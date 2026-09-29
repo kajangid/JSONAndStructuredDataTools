@@ -242,4 +242,35 @@ describe('CLI executable', () => {
     const testOutput = stdoutMock.mock.calls.map((c) => c[0]).join('');
     expect(testOutput.trim()).toBe('true');
   });
+
+  it('generates and validates JSON Schema via CLI commands and aliases', async () => {
+    const docPath = path.join(tempDir, 'data.json');
+    fs.writeFileSync(docPath, '{"user": "Alice", "age": 30}');
+
+    // Generate schema
+    const genCode = await runCli(['node', 'json-tools', 'schema-gen', docPath, '--title=User']);
+    expect(genCode).toBe(0);
+    const schemaOutput = stdoutMock.mock.calls.map((c) => c[0]).join('');
+    const schema = JSON.parse(schemaOutput);
+    expect(schema.title).toBe('User');
+    expect(schema.properties.user.type).toBe('string');
+
+    const schemaPath = path.join(tempDir, 'schema.json');
+    fs.writeFileSync(schemaPath, schemaOutput);
+
+    // Validate valid doc
+    stdoutMock.mockClear();
+    const valCode = await runCli(['node', 'json-schema-validate', docPath, schemaPath]);
+    expect(valCode).toBe(0);
+
+    // Validate invalid doc
+    const invalidDocPath = path.join(tempDir, 'invalid.json');
+    fs.writeFileSync(invalidDocPath, '{"user": 123}');
+    stdoutMock.mockClear();
+    stderrMock.mockClear();
+    const badCode = await runCli(['node', 'json-tools', 'schema-val', invalidDocPath, schemaPath]);
+    expect(badCode).toBe(1);
+    const errOutput = stderrMock.mock.calls.map((c) => c[0]).join('');
+    expect(errOutput).toContain('Invalid against schema');
+  });
 });

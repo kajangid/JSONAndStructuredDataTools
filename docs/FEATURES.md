@@ -1,6 +1,6 @@
 # Feature Guide & API Reference: @kjangid/json-tools
 
-Comprehensive guide for all 9 programmatic tools and CLI commands.
+Comprehensive guide for all 19 programmatic tools and CLI commands.
 
 ---
 
@@ -440,7 +440,107 @@ console.log(getCategories(inventory)); // ['electronics', 'books', 'sale']
 
 ---
 
-## 18. CLI Tool Executable
+## 18. `json-schema-generate`
+
+Infer standard JSON Schema Draft-07 representations from sample JavaScript values or JSON documents. Features prototype-safe property indexing, array item type inference, union types, and required-fields configuration.
+
+### API Signature
+```typescript
+function generateSchema(data: unknown, options?: SchemaGenerateOptions): JsonSchema;
+function generateSchemaJson(data: unknown, options?: SchemaGenerateOptions & { indent?: number }): string;
+
+interface SchemaGenerateOptions {
+  draft?: 'draft-07';
+  title?: string;
+  description?: string;
+  requiredAll?: boolean;
+}
+```
+
+### Examples
+```typescript
+import { generateSchema, generateSchemaJson } from '@kjangid/json-tools/schema-generate';
+
+const sample = {
+  id: 101,
+  name: 'API Service',
+  enabled: true,
+  tags: ['production', 'v2'],
+  metadata: {
+    region: 'us-east-1',
+  },
+};
+
+// Generate Draft-07 schema object
+const schema = generateSchema(sample, {
+  title: 'ServicePayload',
+  requiredAll: true,
+});
+
+// Generate formatted schema JSON string
+const schemaJson = generateSchemaJson(sample, { indent: 2, requiredAll: true });
+console.log(schemaJson);
+```
+
+---
+
+## 19. `json-schema-validate`
+
+Fast, synchronous in-memory JSON Schema Draft-07 validator. Validates types, required fields, constraints (numbers, strings, arrays, objects), enums, and nested structures with detailed error reporting including property paths and failed rules.
+
+### API Signature
+```typescript
+function validateSchema(data: unknown, schema: unknown): ValidationResult;
+function isValidSchema(data: unknown, schema: unknown): boolean;
+function assertValidSchema(data: unknown, schema: unknown): void;
+
+interface ValidationError {
+  path: string;
+  message: string;
+  rule: string;
+}
+
+interface ValidationResult {
+  valid: boolean;
+  errors: ValidationError[];
+}
+```
+
+### Examples
+```typescript
+import { validateSchema, isValidSchema, assertValidSchema } from '@kjangid/json-tools/schema-validate';
+
+const userSchema = {
+  type: 'object',
+  required: ['id', 'email'],
+  properties: {
+    id: { type: 'integer', minimum: 1 },
+    email: { type: 'string', minLength: 5 },
+    role: { type: 'string', enum: ['admin', 'user', 'guest'] },
+  },
+  additionalProperties: false,
+};
+
+// Validate result with diagnostics
+const result = validateSchema({ id: -1, email: 'a@b', extra: true }, userSchema);
+if (!result.valid) {
+  for (const err of result.errors) {
+    console.error(`${err.path}: ${err.message} (${err.rule})`);
+  }
+}
+
+// Fast boolean check
+if (isValidSchema({ id: 1, email: 'user@example.com' }, userSchema)) {
+  console.log('Valid user!');
+}
+
+// Assertion that throws Error with validation details if invalid
+assertValidSchema({ id: 1, email: 'user@example.com' }, userSchema);
+```
+
+---
+
+## 20. CLI Tool Executable
 
 Access utilities directly from your command line:
 
@@ -496,6 +596,14 @@ json-patch apply base.json patch.json
 json-tools jsonpath store.json "$.books[*].title"
 jsonpath-test store.json "$.books[0]" --test
 
+# Infer Draft-07 JSON Schema
+json-tools schema-gen sample.json --title="User" > schema.json
+json-schema-generate sample.json
+
+# Validate Against JSON Schema
+json-tools schema-val schema.json data.json
+json-schema-validate schema.json data.json
+
 # Stdin Piping
 cat data.json | json-tools minify
 cat invalid.json | json-tools validate
@@ -507,7 +615,7 @@ json-tools -v
 
 ---
 
-## 19. Package Version Constant (`VERSION`)
+## 21. Package Version Constant (`VERSION`)
 
 The package exports a `VERSION` string constant that is automatically synchronized with `package.json`:
 

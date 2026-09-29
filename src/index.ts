@@ -149,6 +149,23 @@ export {
   type JsonPathStep,
 } from './jsonpath/index';
 
+// 18. json-schema-generate
+export {
+  generateSchema,
+  generateSchemaJson,
+  type JsonSchema,
+  type GenerateSchemaOptions,
+} from './schema-generate/index';
+
+// 19. json-schema-validate
+export {
+  validateSchema,
+  isValidSchema,
+  assertValidSchema,
+  type SchemaValidationError,
+  type SchemaValidationResult,
+} from './schema-validate/index';
+
 // Shared types and utilities
 export {
   type JsonValue,

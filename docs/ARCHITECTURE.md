@@ -47,6 +47,8 @@
     ├── view/                  # json-view implementation & unit tests
     ├── patch/                 # json-patch implementation & unit tests
     ├── jsonpath/              # jsonpath-test implementation & unit tests
+    ├── schema-generate/       # json-schema-generate implementation & unit tests
+    ├── schema-validate/       # json-schema-validate implementation & unit tests
     ├── version.ts             # Compile-time package version synchronization
     ├── version.test.ts        # Version synchronization unit test
     └── bin/
@@ -112,7 +114,21 @@ Pure-JavaScript evaluator compiling and executing JSONPath queries without runti
 - Supports root `$`, dot child notation (`.prop`), quoted/unquoted bracket notation (`['prop']`), index notation with negative offsets (`[-1]`), slices (`[start:end]`), wildcards (`*`), and recursive descent (`..prop`).
 - Features a compiled query caching pattern (`compileJsonPath`) for high-performance repeated queries.
 
-### 3.10 Version Synchronization & Single Source of Truth (`version.ts`)
+### 3.10 Schema Inference Engine (`schema-generate`)
+Infers standard Draft-07 JSON Schemas from representative sample documents:
+- Analyzes structural types: `null`, `boolean`, `integer`, `number`, `string`, `array`, and `object`.
+- Resolves polymorphic array element types into type unions (`type: ['string', 'number']`).
+- Uses `createSafeRecord()` for schema `properties` dictionaries to protect against prototype tampering.
+- Supports configurable `$schema`, `title`, `description`, and `requiredAll` settings.
+
+### 3.11 In-Memory Draft-07 Schema Validator (`schema-validate`)
+Zero-dependency, synchronous JSON Schema Draft-07 rule evaluator:
+- Validates data types, required object properties, and `additionalProperties` constraints.
+- Validates numerical bounds (`minimum`, `maximum`), string lengths and regular expressions (`minLength`, `maxLength`, `pattern`).
+- Validates array structures (`items`, `minItems`, `maxItems`, `uniqueItems`) and enum membership (`enum`).
+- Produces normalized diagnostics (`ValidationError[]`) with exact property paths and violated constraint rules.
+
+### 3.12 Version Synchronization & Single Source of Truth (`version.ts`)
 The package version is maintained strictly in `package.json`:
 - `tsup.config.ts` and `vitest.config.ts` dynamically read `package.json` at build and test time, injecting `__PACKAGE_VERSION__`.
 - The CLI (`src/bin/cli.ts`) and root library exports (`src/index.ts`) consume `VERSION` directly, eliminating any manual file edits when bumping versions.

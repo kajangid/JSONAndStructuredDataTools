@@ -80,20 +80,22 @@ Guided by the **Ponytail (lazy senior developer)** principle:
 
 ---
 
-### 1.9 `json-schema-generate` (Phase 4)
-- **Planned Architecture**: Recursive type inferrer generating Draft-07 schemas (`type`, `properties`, `required`, `items`).
+### 1.9 `json-schema-generate` (Phase 4 - Implemented)
+- **Current Architecture**: Recursive type inferrer generating Draft-07 schemas (`type`, `properties`, `required`, `items`). Distinguishes integers from numbers, infers array item types, synthesizes union types for polymorphic arrays (`type: ['string', 'number']`), uses `createSafeRecord()` for schema properties, and supports `requiredAll`.
 - **Skipped / Deferred**:
-  - Union type inference (`anyOf`), pattern format detection (UUID, email, ISO date-time), and automated enum deduction.
+  - Pattern format detection (UUID, email, ISO date-time regexes).
+  - Multi-sample merging to detect optional fields automatically across divergent records.
 - **Upgrade Trigger**:
-  - Add heuristic format matchers if users require automated API contract generation from dynamic responses.
+  - Add heuristic format matchers and multi-sample merger if users require automated OpenAPI/JSON-Schema contract generation from live API payload logs.
 
-### 1.10 `json-schema-validate` (Phase 4)
-- **Planned Architecture**: Synchronous, in-memory validator verifying core schema constraints (`type`, `properties`, `required`, `items`, `enum`, `minimum`, `maximum`, `minLength`, `pattern`).
+### 1.10 `json-schema-validate` (Phase 4 - Implemented)
+- **Current Architecture**: Synchronous, in-memory validator verifying Draft-07 constraints (`type`, `properties`, `required`, `additionalProperties`, `items`, `enum`, `minimum`, `maximum`, `minLength`, `maxLength`, `pattern`, `minItems`, `maxItems`, `uniqueItems`). Diagnostic errors with exact paths and rules. Zero dependencies, zero `eval()`.
 - **Skipped / Deferred**:
-  - JIT dynamic code compilation (Ajv style).
+  - JIT dynamic code compilation (`new Function()`, Ajv style).
   - Remote `$ref` network dereferencing.
+  - Complex keyword compositions (`allOf`, `anyOf`, `oneOf`, `not`).
 - **Upgrade Trigger**:
-  - Implement schema pre-compilation only if validation throughput benchmarks require >100,000 validations per second.
+  - Implement dynamic schema pre-compilation only if validation throughput benchmarks require >100,000 validations per second and CSP permits `new Function()`.
 
 ---
 

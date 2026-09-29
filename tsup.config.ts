@@ -25,6 +25,8 @@ export default defineConfig({
     'view/index': 'src/view/index.ts',
     'patch/index': 'src/patch/index.ts',
     'jsonpath/index': 'src/jsonpath/index.ts',
+    'schema-generate/index': 'src/schema-generate/index.ts',
+    'schema-validate/index': 'src/schema-validate/index.ts',
     'bin/cli': 'src/bin/cli.ts',
   },
   format: ['esm', 'cjs'],

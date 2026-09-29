@@ -18,6 +18,8 @@ import { repairJson } from '../repair/index';
 import { renderJsonTree } from '../view/index';
 import { createPatch, applyPatch } from '../patch/index';
 import { queryJsonPath, testJsonPath } from '../jsonpath/index';
+import { generateSchemaJson } from '../schema-generate/index';
+import { validateSchema } from '../schema-validate/index';
 import { VERSION } from '../version';
 
 const HELP_TEXT = `
@@ -45,6 +47,8 @@ Commands:
   view <file>         Render JSON as an ASCII tree (options: --depth=N, --color)
   patch <subcommand>  RFC 6902 JSON Patch (json-patch create <f1> <f2> | apply <doc> <patch>)
   jsonpath <f> <expr> RFC 9535 JSONPath query evaluator (option: --test)
+  schema-gen <file>   Infer Draft-07 JSON Schema from sample JSON document
+  schema-val <f> <s>  Validate JSON document against a JSON Schema file
 
 Options:
   --help, -h          Show this help message
@@ -327,6 +331,39 @@ export async function runCli(argv: string[] = process.argv): Promise<number> {
         const matches = queryJsonPath(input, expr);
         process.stdout.write(JSON.stringify(matches, null, 2) + '\n');
         return 0;
+      }
+
+      case 'schema-gen':
+      case 'schema-generate': {
+        const input = await getInput(positional[0]);
+        const draft = flags['no-draft'] !== true;
+        const required = flags['no-required'] !== true;
+        const title = typeof flags['title'] === 'string' ? flags['title'] : undefined;
+        const indent = flags['indent'] ? parseInt(String(flags['indent']), 10) : 2;
+        const schema = generateSchemaJson(input, { draft, required, title, indent });
+        process.stdout.write(schema + '\n');
+        return 0;
+      }
+
+      case 'schema-val':
+      case 'schema-validate': {
+        if (positional.length < 2) {
+          process.stderr.write('Error: schema-validate requires document and schema files: json-schema-validate <doc> <schema>\n');
+          return 2;
+        }
+        const doc = fs.readFileSync(path.resolve(process.cwd(), positional[0]!), 'utf-8');
+        const schema = fs.readFileSync(path.resolve(process.cwd(), positional[1]!), 'utf-8');
+        const result = validateSchema(doc, schema);
+        if (result.valid) {
+          process.stdout.write('Valid JSON Schema.\n');
+          return 0;
+        } else {
+          process.stderr.write(`Invalid against schema (${result.errors.length} error${result.errors.length === 1 ? '' : 's'}):\n`);
+          for (const err of result.errors) {
+            process.stderr.write(`- [${err.keyword}] at "${err.path}": ${err.message}\n`);
+          }
+          return 1;
+        }
       }
 
       default: {

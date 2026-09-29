@@ -6,7 +6,7 @@
 [![CI](https://github.com/kajangid/JSONAndStructuredDataTools/actions/workflows/ci.yml/badge.svg)](https://github.com/kajangid/JSONAndStructuredDataTools/actions/workflows/ci.yml)
 [![Release](https://github.com/kajangid/JSONAndStructuredDataTools/actions/workflows/release.yml/badge.svg)](https://github.com/kajangid/JSONAndStructuredDataTools/actions/workflows/release.yml)
 [![NPM Version](https://img.shields.io/npm/v/@kjangid/json-tools.svg)](https://www.npmjs.com/package/@kjangid/json-tools)
-[![Tests](https://img.shields.io/badge/Tests-171%20passed-success.svg)]()
+[![Tests](https://img.shields.io/badge/Tests-186%20passed-success.svg)]()
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![Node](https://img.shields.io/badge/Node-%3E%3D18.0.0-green.svg)](package.json)
 [![Coverage](https://img.shields.io/badge/coverage-96.3%25-brightgreen.svg)](docs/TESTING.md)
@@ -21,12 +21,12 @@ A high-performance, **zero-dependency**, type-safe utility toolkit and CLI for r
 - **Isomorphic (Node & Browser)**: Seamlessly works across Node.js (>=18), modern browsers, Cloudflare Workers, Deno, and Bun.
 - **Dual ESM & CommonJS**: Full support for both `import` and `require` with first-class TypeScript `.d.ts` declaration maps.
 - **Granular Subpath Imports**: Import individual tools (`@kjangid/json-tools/safe-parse`) for maximum tree-shaking efficiency.
-- **Built-in CLI Executables**: Includes both unified `json-tools <command>` and individual command aliases (`json-format`, `json-minify`, `json-validate`, `json-diff`, `json-merge`, `json-repair`, `json-view`, `json-patch`, `jsonpath-test`, etc.).
+- **Built-in CLI Executables**: Includes both unified `json-tools <command>` and individual command aliases (`json-format`, `json-minify`, `json-validate`, `json-diff`, `json-merge`, `json-repair`, `json-view`, `json-patch`, `jsonpath-test`, `json-schema-generate`, `json-schema-validate`, etc.).
 - **Security by Default**: Strict prototype pollution defenses against `__proto__`, `constructor`, and `prototype` exploits.
 
 ---
 
-## The 17 Core Utilities
+## The 19 Core Utilities
 
 | Utility                   | Description                                                                                             | Primary Exports                                  |
 | :------------------------ | :------------------------------------------------------------------------------------------------------ | :----------------------------------------------- |
@@ -47,6 +47,8 @@ A high-performance, **zero-dependency**, type-safe utility toolkit and CLI for r
 | **`json-view`**           | Render JSON data structures as Unicode/ASCII box-drawing trees with optional ANSI color highlighting.    | `renderJsonTree`                                 |
 | **`json-patch`**          | Generate and apply RFC 6902 JSON patches with JSON Pointer (`~0`, `~1`) and pollution protection.       | `createPatch`, `applyPatch`, `safeApplyPatch`    |
 | **`jsonpath-test`**       | Query and test RFC 9535 JSONPath expressions (`$`, `.prop`, `[0]`, `[*]`, `[start:end]`, `..prop`).    | `queryJsonPath`, `testJsonPath`                  |
+| **`json-schema-generate`**| Infer standard Draft-07 JSON Schema with structural typing from sample payloads.                        | `generateSchema`, `generateSchemaJson`           |
+| **`json-schema-validate`**| Validate documents against JSON Schema Draft-07 rules with precise diagnostic errors.                  | `validateSchema`, `isValidSchema`, `assertValidSchema` |
 
 ---
 
@@ -341,6 +343,54 @@ const firstBook = queryJsonPath(store, "$.books[0:1]");
 const hasPrice = testJsonPath(store, "$..price"); // true
 ```
 
+### 17. `json-schema-generate`
+
+```typescript
+import { generateSchema, generateSchemaJson } from "@kjangid/json-tools/schema-generate";
+
+const sample = {
+  id: 101,
+  name: "Production Gateway",
+  active: true,
+  tags: ["api", "v2"],
+};
+
+const schema = generateSchema(sample, {
+  title: "ServiceConfig",
+  requiredAll: true,
+});
+
+console.log(generateSchemaJson(sample, { indent: 2 }));
+// Emits Draft-07 compliant schema with object properties and types
+```
+
+### 18. `json-schema-validate`
+
+```typescript
+import { validateSchema, isValidSchema } from "@kjangid/json-tools/schema-validate";
+
+const schema = {
+  type: "object",
+  required: ["id", "name"],
+  properties: {
+    id: { type: "integer", minimum: 1 },
+    name: { type: "string", minLength: 3 },
+  },
+};
+
+const result = validateSchema({ id: 0, name: "API" }, schema);
+if (!result.valid) {
+  for (const err of result.errors) {
+    console.error(`${err.path}: ${err.message} (rule: ${err.rule})`);
+  }
+}
+
+// Fast boolean check
+if (isValidSchema({ id: 1, name: "API" }, schema)) {
+  console.log("Payload satisfies schema!");
+}
+```
+
 ---
 
 ## CLI Tools
@@ -403,6 +453,14 @@ json-patch apply base.json patch.json
 json-tools jsonpath store.json "$.books[*].title"
 jsonpath-test store.json "$.books[0]" --test
 
+# Infer Draft-07 JSON Schema
+json-tools schema-gen sample.json --title="User" > schema.json
+json-schema-generate sample.json
+
+# Validate Against JSON Schema
+json-tools schema-val schema.json data.json
+json-schema-validate schema.json data.json
+
 # Stdin Piping
 cat data.json | json-tools minify
 cat invalid.json | json-tools validate
@@ -433,7 +491,7 @@ Dive deeper into our dedicated architecture and operational sub-documents:
 | Script                  | Command                 | Purpose                                   |
 | :---------------------- | :---------------------- | :---------------------------------------- |
 | `npm run build`         | `tsup`                  | Build ESM, CommonJS, and DTS bundles      |
-| `npm test`              | `vitest run`            | Run the complete 171-test unit test suite |
+| `npm test`              | `vitest run`            | Run the complete 186-test unit test suite |
 | `npm run test:watch`    | `vitest`                | Run tests in interactive watch mode       |
 | `npm run test:coverage` | `vitest run --coverage` | Generate V8 coverage report               |
 | `npm run typecheck`     | `tsc --noEmit`          | Strict static type validation             |

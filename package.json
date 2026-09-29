@@ -37,7 +37,9 @@
     "json-view": "dist/bin/cli.cjs",
     "json-patch": "dist/bin/cli.cjs",
     "jsonpath-test": "dist/bin/cli.cjs",
-    "jsonpath": "dist/bin/cli.cjs"
+    "jsonpath": "dist/bin/cli.cjs",
+    "json-schema-generate": "dist/bin/cli.cjs",
+    "json-schema-validate": "dist/bin/cli.cjs"
   },
   "exports": {
     ".": {
@@ -129,6 +131,16 @@
       "types": "./dist/jsonpath/index.d.ts",
       "import": "./dist/jsonpath/index.mjs",
       "require": "./dist/jsonpath/index.cjs"
+    },
+    "./schema-generate": {
+      "types": "./dist/schema-generate/index.d.ts",
+      "import": "./dist/schema-generate/index.mjs",
+      "require": "./dist/schema-generate/index.cjs"
+    },
+    "./schema-validate": {
+      "types": "./dist/schema-validate/index.d.ts",
+      "import": "./dist/schema-validate/index.mjs",
+      "require": "./dist/schema-validate/index.cjs"
     }
   },
   "files": [

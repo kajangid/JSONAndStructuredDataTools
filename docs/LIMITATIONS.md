@@ -95,3 +95,17 @@ This document outlines architectural boundaries, trade-offs, and operational lim
 - **Arbitrary Script Filters**: Supports standard selectors (`$`, `.prop`, `['prop']`, `[index]`, `[*]`, `[start:end]`, `..prop`, union `[a, b]`). Arbitrary script filter expressions (`[?(@.price < 10)]`) requiring `eval()` or sandboxed expression parsers are intentionally deferred to prevent code-injection security vulnerabilities.
 - **In-Memory Traversal**: Evaluates JSONPath queries against in-memory JavaScript structures. For streaming multi-gigabyte queries without loading into RAM, dedicated streaming token processors should be used.
 
+---
+
+## 15. JSON Schema Generation (`json-schema-generate`)
+- **Single-Sample Inference**: Schema generation derives constraints and property types solely from the provided sample payload. Optional properties not present in the sample cannot be inferred unless provided via multiple sample union merging.
+- **Draft-07 Scope**: Emits Draft-07 schemas (`http://json-schema.org/draft-07/schema#`). Newer draft keywords (2020-12 `$defs`, `prefixItems`) are not generated.
+- **Empty Array Items**: Empty arrays `[]` cannot have their item schema inferred and default to empty schema `{}` (accepts any item type).
+
+---
+
+## 16. JSON Schema Validation (`json-schema-validate`)
+- **In-Memory Draft-07 Evaluator**: Evaluates Draft-07 core rules synchronously in JavaScript.
+- **Remote `$ref` Resolution**: Does not perform asynchronous network HTTP calls to fetch remote schema URIs (`http://example.com/schema.json`) to guarantee zero network latency, offline execution, and immunity against Server-Side Request Forgery (SSRF) vulnerabilities.
+- **JIT Compilation**: Executes schema traversal using AST walk rather than dynamic `new Function()` JIT compiling to preserve strict Content Security Policy (CSP) compatibility in browser and edge runtimes.
+

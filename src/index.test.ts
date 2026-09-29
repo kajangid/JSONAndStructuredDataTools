@@ -77,6 +77,15 @@ describe('package root entrypoint (src/index.ts)', () => {
     expect(typeof IndexExports.testJsonPath).toBe('function');
     expect(typeof IndexExports.compileJsonPath).toBe('function');
 
+    // 18. json-schema-generate
+    expect(typeof IndexExports.generateSchema).toBe('function');
+    expect(typeof IndexExports.generateSchemaJson).toBe('function');
+
+    // 19. json-schema-validate
+    expect(typeof IndexExports.validateSchema).toBe('function');
+    expect(typeof IndexExports.isValidSchema).toBe('function');
+    expect(typeof IndexExports.assertValidSchema).toBe('function');
+
     // Shared security utilities
     expect(typeof IndexExports.isUnsafePropertyKey).toBe('function');
     expect(typeof IndexExports.hasOwn).toBe('function');
