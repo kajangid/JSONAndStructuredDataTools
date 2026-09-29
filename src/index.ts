@@ -123,6 +123,32 @@ export {
   type RenderJsonTreeOptions,
 } from './view/index';
 
+// 16. json-patch
+export {
+  createPatch,
+  applyPatch,
+  safeApplyPatch,
+  applyOperation,
+  escapeJsonPointer,
+  unescapeJsonPointer,
+  parseJsonPointer,
+  compileJsonPointer,
+  JsonPatchError,
+  type JsonPatchOp,
+  type JsonPatchOperation,
+  type ApplyPatchOptions,
+  type SafeApplyPatchResult,
+} from './patch/index';
+
+// 17. jsonpath-test
+export {
+  queryJsonPath,
+  testJsonPath,
+  compileJsonPath,
+  parseJsonPath,
+  type JsonPathStep,
+} from './jsonpath/index';
+
 // Shared types and utilities
 export {
   type JsonValue,

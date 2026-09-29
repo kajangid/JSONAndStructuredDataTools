@@ -201,4 +201,45 @@ describe('CLI executable', () => {
     expect(output).toContain('name');
     expect(output).toContain('Alice');
   });
+
+  it('creates and applies JSON patches via patch command and alias', async () => {
+    const f1 = path.join(tempDir, 'doc1.json');
+    const f2 = path.join(tempDir, 'doc2.json');
+    fs.writeFileSync(f1, '{"title": "Draft"}');
+    fs.writeFileSync(f2, '{"title": "Published", "version": 1}');
+
+    // Create patch
+    const createCode = await runCli(['node', 'json-tools', 'patch', 'create', f1, f2]);
+    expect(createCode).toBe(0);
+    const createOutput = stdoutMock.mock.calls.map((c) => c[0]).join('');
+    const patch = JSON.parse(createOutput);
+    expect(Array.isArray(patch)).toBe(true);
+
+    const patchFile = path.join(tempDir, 'patch.json');
+    fs.writeFileSync(patchFile, createOutput);
+
+    // Apply patch via alias
+    stdoutMock.mockClear();
+    const applyCode = await runCli(['node', 'json-patch', 'apply', f1, patchFile]);
+    expect(applyCode).toBe(0);
+    const applyOutput = stdoutMock.mock.calls.map((c) => c[0]).join('');
+    const patchedDoc = JSON.parse(applyOutput);
+    expect(patchedDoc).toEqual({ title: 'Published', version: 1 });
+  });
+
+  it('evaluates and tests JSONPath expressions via jsonpath command and alias', async () => {
+    const filePath = path.join(tempDir, 'store.json');
+    fs.writeFileSync(filePath, '{"items": [{"id": 10}, {"id": 20}]}');
+
+    const code = await runCli(['node', 'json-tools', 'jsonpath', filePath, '$.items[*].id']);
+    expect(code).toBe(0);
+    const output = stdoutMock.mock.calls.map((c) => c[0]).join('');
+    expect(JSON.parse(output)).toEqual([10, 20]);
+
+    stdoutMock.mockClear();
+    const testCode = await runCli(['node', 'jsonpath-test', filePath, '$.items[0]', '--test']);
+    expect(testCode).toBe(0);
+    const testOutput = stdoutMock.mock.calls.map((c) => c[0]).join('');
+    expect(testOutput.trim()).toBe('true');
+  });
 });

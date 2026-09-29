@@ -6,7 +6,7 @@
 [![CI](https://github.com/kajangid/JSONAndStructuredDataTools/actions/workflows/ci.yml/badge.svg)](https://github.com/kajangid/JSONAndStructuredDataTools/actions/workflows/ci.yml)
 [![Release](https://github.com/kajangid/JSONAndStructuredDataTools/actions/workflows/release.yml/badge.svg)](https://github.com/kajangid/JSONAndStructuredDataTools/actions/workflows/release.yml)
 [![NPM Version](https://img.shields.io/npm/v/@kjangid/json-tools.svg)](https://www.npmjs.com/package/@kjangid/json-tools)
-[![Tests](https://img.shields.io/badge/Tests-151%20passed-success.svg)]()
+[![Tests](https://img.shields.io/badge/Tests-171%20passed-success.svg)]()
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![Node](https://img.shields.io/badge/Node-%3E%3D18.0.0-green.svg)](package.json)
 [![Coverage](https://img.shields.io/badge/coverage-96.3%25-brightgreen.svg)](docs/TESTING.md)
@@ -21,12 +21,12 @@ A high-performance, **zero-dependency**, type-safe utility toolkit and CLI for r
 - **Isomorphic (Node & Browser)**: Seamlessly works across Node.js (>=18), modern browsers, Cloudflare Workers, Deno, and Bun.
 - **Dual ESM & CommonJS**: Full support for both `import` and `require` with first-class TypeScript `.d.ts` declaration maps.
 - **Granular Subpath Imports**: Import individual tools (`@kjangid/json-tools/safe-parse`) for maximum tree-shaking efficiency.
-- **Built-in CLI Executables**: Includes both unified `json-tools <command>` and individual command aliases (`json-format`, `json-minify`, `json-validate`, `json-diff`, `json-merge`, `json-repair`, `json-view`, etc.).
+- **Built-in CLI Executables**: Includes both unified `json-tools <command>` and individual command aliases (`json-format`, `json-minify`, `json-validate`, `json-diff`, `json-merge`, `json-repair`, `json-view`, `json-patch`, `jsonpath-test`, etc.).
 - **Security by Default**: Strict prototype pollution defenses against `__proto__`, `constructor`, and `prototype` exploits.
 
 ---
 
-## The 15 Core Utilities
+## The 17 Core Utilities
 
 | Utility                   | Description                                                                                             | Primary Exports                                  |
 | :------------------------ | :------------------------------------------------------------------------------------------------------ | :----------------------------------------------- |
@@ -45,6 +45,8 @@ A high-performance, **zero-dependency**, type-safe utility toolkit and CLI for r
 | **`json-merge`**          | Deep-merge JSON documents with configurable array strategies (`replace`, `concat`, `union`) and pollution guards. | `mergeJson`, `mergeJsonWithOptions`             |
 | **`json-repair`**         | Fix trailing commas, quotes, unquoted keys, line/block comments, and unclosed brackets.                 | `repairJson`, `safeRepairJson`                   |
 | **`json-view`**           | Render JSON data structures as Unicode/ASCII box-drawing trees with optional ANSI color highlighting.    | `renderJsonTree`                                 |
+| **`json-patch`**          | Generate and apply RFC 6902 JSON patches with JSON Pointer (`~0`, `~1`) and pollution protection.       | `createPatch`, `applyPatch`, `safeApplyPatch`    |
+| **`jsonpath-test`**       | Query and test RFC 9535 JSONPath expressions (`$`, `.prop`, `[0]`, `[*]`, `[start:end]`, `..prop`).    | `queryJsonPath`, `testJsonPath`                  |
 
 ---
 
@@ -287,6 +289,58 @@ root
 */
 ```
 
+### 15. `json-patch` (RFC 6902 / RFC 6901)
+
+```typescript
+import { createPatch, applyPatch, safeApplyPatch } from "@kjangid/json-tools/patch";
+
+const docA = { title: "Draft", tags: ["tech"] };
+const docB = { title: "Published", tags: ["tech", "release"], version: 1 };
+
+// Generate RFC 6902 Patch
+const patch = createPatch(docA, docB);
+// Output: [
+//   { op: "replace", path: "/title", value: "Published" },
+//   { op: "add", path: "/tags/1", value: "release" },
+//   { op: "add", path: "/version", value: 1 }
+// ]
+
+// Apply patch
+const updated = applyPatch(docA, patch);
+
+// Safe application with diagnostics
+const result = safeApplyPatch(docA, [{ op: "test", path: "/version", value: 99 }]);
+if (!result.success) {
+  console.error(result.error); // "Test failed at path \"/version\"..."
+}
+```
+
+### 16. `jsonpath-test` (RFC 9535)
+
+```typescript
+import { queryJsonPath, testJsonPath } from "@kjangid/json-tools/jsonpath";
+
+const store = {
+  books: [
+    { title: "Refactoring", author: "Fowler", price: 45 },
+    { title: "Clean Code", author: "Martin", price: 40 }
+  ]
+};
+
+// Query paths, wildcards, slices, and recursive descent
+const titles = queryJsonPath(store, "$.books[*].title");
+// ["Refactoring", "Clean Code"]
+
+const allAuthors = queryJsonPath(store, "$..author");
+// ["Fowler", "Martin"]
+
+const firstBook = queryJsonPath(store, "$.books[0:1]");
+// [{ title: "Refactoring", author: "Fowler", price: 45 }]
+
+// Test presence
+const hasPrice = testJsonPath(store, "$..price"); // true
+```
+
 ---
 
 ## CLI Tools
@@ -341,6 +395,14 @@ json-repair broken.json
 json-tools view data.json --depth=3 --color
 json-view data.json
 
+# RFC 6902 JSON Patch
+json-tools patch create base.json target.json > patch.json
+json-patch apply base.json patch.json
+
+# RFC 9535 JSONPath Query & Test
+json-tools jsonpath store.json "$.books[*].title"
+jsonpath-test store.json "$.books[0]" --test
+
 # Stdin Piping
 cat data.json | json-tools minify
 cat invalid.json | json-tools validate
@@ -371,7 +433,7 @@ Dive deeper into our dedicated architecture and operational sub-documents:
 | Script                  | Command                 | Purpose                                   |
 | :---------------------- | :---------------------- | :---------------------------------------- |
 | `npm run build`         | `tsup`                  | Build ESM, CommonJS, and DTS bundles      |
-| `npm test`              | `vitest run`            | Run the complete 151-test unit test suite |
+| `npm test`              | `vitest run`            | Run the complete 171-test unit test suite |
 | `npm run test:watch`    | `vitest`                | Run tests in interactive watch mode       |
 | `npm run test:coverage` | `vitest run --coverage` | Generate V8 coverage report               |
 | `npm run typecheck`     | `tsc --noEmit`          | Strict static type validation             |

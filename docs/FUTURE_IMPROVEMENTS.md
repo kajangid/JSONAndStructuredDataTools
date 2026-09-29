@@ -64,15 +64,15 @@ Guided by the **Ponytail (lazy senior developer)** principle:
 
 ---
 
-### 1.7 `json-patch` (Phase 3)
-- **Planned Architecture**: RFC 6902 patch generation and application using JSON Pointer (`~0`, `~1`) and `add`, `remove`, `replace`, `test` operations.
+### 1.7 `json-patch` (Phase 3 - Implemented)
+- **Current Architecture**: Generates RFC 6902 patch arrays (`add`, `remove`, `replace`) with reverse-ordered array removals to preserve indices. Fully applies `add`, `remove`, `replace`, `move`, `copy`, `test` with RFC 6901 JSON pointer escaping and prototype pollution protection.
 - **Skipped / Deferred**:
-  - Graph-based Longest Common Subsequence (LCS) solver for detecting `move` and `copy` operations.
+  - Automatic synthesis of `move` and `copy` operations from diffs using a Graph-based Longest Common Subsequence (LCS) matrix.
 - **Upgrade Trigger**:
   - Implement `move`/`copy` heuristics only if payload size benchmarks prove that diffing large array reorderings creates unacceptable patch file sizes.
 
-### 1.8 `jsonpath-test` (Phase 3)
-- **Planned Architecture**: RFC 9535 evaluator extending `src/path/index.ts` to support `$`, `.prop`, `['prop']`, `[0]`, `[*]`, `[start:end]`, and recursive descent `..`.
+### 1.8 `jsonpath-test` (Phase 3 - Implemented)
+- **Current Architecture**: Evaluates RFC 9535 queries supporting root `$`, dot child notation, bracket strings, integer indices with negative offsets, slices (`[start:end]`), wildcards (`*`), unions (`[a, b]`), and recursive descent (`..prop`). Pre-compiles steps via `compileJsonPath`. Zero dependencies, zero `eval()`.
 - **Skipped / Deferred**:
   - Arbitrary script expressions (`[?(@.price < 10)]`) and custom regex predicates.
 - **Upgrade Trigger**:

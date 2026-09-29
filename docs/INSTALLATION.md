@@ -31,7 +31,7 @@ bun add @kjangid/json-tools
 
 ## 3. Global Installation for CLI Usage
 
-To use the standalone CLI tools (`json-tools`, `json-format`, `json-minify`, `json-validate`, `json-diff`, `json-flatten`, `json-unflatten`, `json-path`, `json-escape`, `json-sort-keys`, `jsonl`, `json-merge`, `json-repair`, `json-view`) globally in your terminal:
+To use the standalone CLI tools (`json-tools`, `json-format`, `json-minify`, `json-validate`, `json-diff`, `json-flatten`, `json-unflatten`, `json-path`, `json-escape`, `json-sort-keys`, `jsonl`, `json-merge`, `json-repair`, `json-view`, `json-patch`, `jsonpath-test`) globally in your terminal:
 
 ```bash
 # Global install with npm
@@ -43,6 +43,8 @@ npx @kjangid/json-tools --version
 npx @kjangid/json-tools validate package.json
 npx @kjangid/json-tools format input.json --sort-keys
 npx @kjangid/json-tools repair broken.json
+npx @kjangid/json-tools patch create doc1.json doc2.json
+npx @kjangid/json-tools jsonpath store.json "$.books[*].title"
 ```
 
 ---
@@ -71,6 +73,10 @@ import {
   mergeJson,
   repairJson,
   renderJsonTree,
+  createPatch,
+  applyPatch,
+  queryJsonPath,
+  testJsonPath,
   VERSION,
 } from '@kjangid/json-tools';
 ```
@@ -123,6 +129,12 @@ import { repairJson, safeRepairJson } from '@kjangid/json-tools/repair';
 
 // Only loads tree view
 import { renderJsonTree } from '@kjangid/json-tools/view';
+
+// Only loads RFC 6902 patch
+import { createPatch, applyPatch } from '@kjangid/json-tools/patch';
+
+// Only loads RFC 9535 JSONPath evaluator
+import { queryJsonPath, testJsonPath } from '@kjangid/json-tools/jsonpath';
 ```
 
 ### 4.3 CommonJS Support

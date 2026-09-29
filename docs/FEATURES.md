@@ -379,7 +379,68 @@ root
 
 ---
 
-## 16. CLI Tool Executable
+## 16. `json-patch`
+
+RFC 6902 compliant JSON Patch generation, application, and verification with RFC 6901 JSON pointer escaping and prototype protection.
+
+### Examples
+```typescript
+import { createPatch, applyPatch, safeApplyPatch } from '@kjangid/json-tools/patch';
+
+const source = { title: 'v1', tags: ['alpha'] };
+const target = { title: 'v2', tags: ['alpha', 'beta'], released: true };
+
+// Generate RFC 6902 patch operations
+const patch = createPatch(source, target);
+// [
+//   { op: 'replace', path: '/title', value: 'v2' },
+//   { op: 'add', path: '/tags/1', value: 'beta' },
+//   { op: 'add', path: '/released', value: true }
+// ]
+
+// Apply patch
+const updated = applyPatch(source, patch);
+
+// Safe application with diagnostics
+const result = safeApplyPatch(source, [{ op: 'test', path: '/title', value: 'v99' }]);
+if (!result.success) {
+  console.error(result.error);
+}
+```
+
+---
+
+## 17. `jsonpath-test`
+
+RFC 9535 JSONPath query evaluator and tester supporting child selectors, bracket notation, negative array indices, slices, wildcards, and recursive descent.
+
+### Examples
+```typescript
+import { queryJsonPath, testJsonPath, compileJsonPath } from '@kjangid/json-tools/jsonpath';
+
+const inventory = {
+  items: [
+    { sku: 'A1', price: 29.99, categories: ['electronics'] },
+    { sku: 'B2', price: 9.99, categories: ['books', 'sale'] }
+  ]
+};
+
+// Query paths, wildcards, slices, and recursive descent
+const skus = queryJsonPath(inventory, '$.items[*].sku'); // ['A1', 'B2']
+const allPrices = queryJsonPath(inventory, '$..price'); // [29.99, 9.99]
+const sliced = queryJsonPath(inventory, '$.items[0:1]');
+
+// Test presence
+const hasSale = testJsonPath(inventory, '$..categories[*]'); // true
+
+// Pre-compiled query function for high throughput
+const getCategories = compileJsonPath('$..categories[*]');
+console.log(getCategories(inventory)); // ['electronics', 'books', 'sale']
+```
+
+---
+
+## 18. CLI Tool Executable
 
 Access utilities directly from your command line:
 
@@ -427,6 +488,14 @@ json-repair broken.json
 json-tools view complex.json --depth=3 --color
 json-view complex.json
 
+# RFC 6902 JSON Patch
+json-tools patch create base.json target.json > patch.json
+json-patch apply base.json patch.json
+
+# RFC 9535 JSONPath Query & Test
+json-tools jsonpath store.json "$.books[*].title"
+jsonpath-test store.json "$.books[0]" --test
+
 # Stdin Piping
 cat data.json | json-tools minify
 cat invalid.json | json-tools validate
@@ -438,7 +507,7 @@ json-tools -v
 
 ---
 
-## 17. Package Version Constant (`VERSION`)
+## 19. Package Version Constant (`VERSION`)
 
 The package exports a `VERSION` string constant that is automatically synchronized with `package.json`:
 

@@ -16,6 +16,8 @@ import { parseJsonl, formatJsonlSummary } from '../jsonl/index';
 import { mergeJsonWithOptions } from '../merge/index';
 import { repairJson } from '../repair/index';
 import { renderJsonTree } from '../view/index';
+import { createPatch, applyPatch } from '../patch/index';
+import { queryJsonPath, testJsonPath } from '../jsonpath/index';
 import { VERSION } from '../version';
 
 const HELP_TEXT = `
@@ -41,6 +43,8 @@ Commands:
   merge <f1> <f2...>  Deep-merge multiple JSON files (options: --arrays=replace|concat|union)
   repair <file>       Repair malformed JSON (trailing commas, quotes, unclosed brackets)
   view <file>         Render JSON as an ASCII tree (options: --depth=N, --color)
+  patch <subcommand>  RFC 6902 JSON Patch (json-patch create <f1> <f2> | apply <doc> <patch>)
+  jsonpath <f> <expr> RFC 9535 JSONPath query evaluator (option: --test)
 
 Options:
   --help, -h          Show this help message
@@ -97,11 +101,13 @@ export async function runCli(argv: string[] = process.argv): Promise<number> {
   let command = '';
   let args = rawArgs;
 
-  // Detect if invoked via direct binary alias (e.g. json-format, json-minify, jsonl)
+  // Detect if invoked via direct binary alias (e.g. json-format, json-minify, jsonl, json-patch, jsonpath)
   if (execName.startsWith('json-') && execName !== 'json-tools') {
     command = execName.replace(/^json-/, '');
   } else if (execName === 'jsonl') {
     command = 'jsonl';
+  } else if (execName === 'jsonpath' || execName === 'jsonpath-test') {
+    command = 'jsonpath';
   } else if (rawArgs.length > 0 && !rawArgs[0]?.startsWith('-')) {
     command = rawArgs[0]!;
     args = rawArgs.slice(1);
@@ -275,6 +281,51 @@ export async function runCli(argv: string[] = process.argv): Promise<number> {
         const colors = flags['color'] === true;
         const tree = renderJsonTree(input, { maxDepth, colors });
         process.stdout.write(tree + '\n');
+        return 0;
+      }
+
+      case 'patch': {
+        const sub = positional[0];
+        if (sub === 'apply') {
+          if (positional.length < 3) {
+            process.stderr.write('Error: patch apply requires two arguments: json-patch apply <docFile> <patchFile>\n');
+            return 2;
+          }
+          const doc = JSON.parse(fs.readFileSync(path.resolve(process.cwd(), positional[1]!), 'utf-8'));
+          const patch = JSON.parse(fs.readFileSync(path.resolve(process.cwd(), positional[2]!), 'utf-8'));
+          const patched = applyPatch(doc, patch);
+          process.stdout.write(JSON.stringify(patched, null, 2) + '\n');
+          return 0;
+        }
+
+        const file1 = sub === 'create' ? positional[1] : positional[0];
+        const file2 = sub === 'create' ? positional[2] : positional[1];
+        if (!file1 || !file2) {
+          process.stderr.write('Error: patch create requires two arguments: json-patch create <file1> <file2>\n');
+          return 2;
+        }
+        const doc1 = JSON.parse(fs.readFileSync(path.resolve(process.cwd(), file1), 'utf-8'));
+        const doc2 = JSON.parse(fs.readFileSync(path.resolve(process.cwd(), file2), 'utf-8'));
+        const patch = createPatch(doc1, doc2);
+        process.stdout.write(JSON.stringify(patch, null, 2) + '\n');
+        return 0;
+      }
+
+      case 'jsonpath':
+      case 'jsonpath-test': {
+        if (positional.length < 2) {
+          process.stderr.write('Error: jsonpath requires a file and a JSONPath expression: jsonpath <file> <expr>\n');
+          return 2;
+        }
+        const input = await getInput(positional[0]);
+        const expr = positional[1]!;
+        if (flags['test']) {
+          const matched = testJsonPath(input, expr);
+          process.stdout.write((matched ? 'true' : 'false') + '\n');
+          return matched ? 0 : 1;
+        }
+        const matches = queryJsonPath(input, expr);
+        process.stdout.write(JSON.stringify(matches, null, 2) + '\n');
         return 0;
       }
 

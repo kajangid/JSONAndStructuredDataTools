@@ -51,12 +51,14 @@ npm run typecheck
 | **`json-merge`** | `src/merge/index.test.ts` | 8 | Deep merging, array modes (replace, concat, union), prototype pollution guard, multi-source merging |
 | **`json-repair`** | `src/repair/index.test.ts` | 8 | Trailing commas, single quotes, unquoted keys, line/block comments, auto-balancing brackets, safeRepairJson |
 | **`json-view`** | `src/view/index.test.ts` | 6 | Box-drawing tree rendering, maxDepth truncation, ANSI terminal color toggles, root labels |
+| **`json-patch`** | `src/patch/index.test.ts` | 8 | Pointer escaping, patch generation (objects, arrays), apply (add, remove, replace, move, copy, test), prototype defense |
+| **`jsonpath-test`** | `src/jsonpath/index.test.ts` | 10 | Dot & bracket queries, indices, negative offsets, slicing, wildcards, recursive descent, unions, compiled queries, testJsonPath |
 | **`shared/security`** | `src/shared/security.test.ts` | 6 | Prototype pollution keys, safe property checking, null-prototype objects |
 | **`shared/parser`** | `src/shared/parser.test.ts` | 11 | Line/column calculations, visual caret error snippets, native message extraction, fallback scanner |
 | **`root entrypoint`** | `src/index.test.ts` | 2 | Package export verification, end-to-end integration workflows across all utilities |
 | **`version constant`** | `src/version.test.ts` | 1 | Dynamic package.json version synchronization validation |
-| **`CLI Executable`** | `src/bin/cli.test.ts` | 14 | `--version`, `-v`, `--help`, `format`, `minify`, `validate`, `diff`, `flatten`, `unflatten`, `path`, `escape`, `sort-keys`, `jsonl`, `merge`, `repair`, `view` |
-| **Total** | **20 files** | **151 tests** | **100% Pass Rate** |
+| **`CLI Executable`** | `src/bin/cli.test.ts` | 16 | `--version`, `-v`, `--help`, `format`, `minify`, `validate`, `diff`, `flatten`, `unflatten`, `path`, `escape`, `sort-keys`, `jsonl`, `merge`, `repair`, `view`, `patch`, `jsonpath` |
+| **Total** | **22 files** | **171 tests** | **100% Pass Rate** |
 
 ---
 

@@ -23,6 +23,8 @@ export default defineConfig({
     'merge/index': 'src/merge/index.ts',
     'repair/index': 'src/repair/index.ts',
     'view/index': 'src/view/index.ts',
+    'patch/index': 'src/patch/index.ts',
+    'jsonpath/index': 'src/jsonpath/index.ts',
     'bin/cli': 'src/bin/cli.ts',
   },
   format: ['esm', 'cjs'],

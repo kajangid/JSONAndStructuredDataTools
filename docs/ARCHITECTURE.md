@@ -45,6 +45,8 @@
     ├── merge/                 # json-merge implementation & unit tests
     ├── repair/                # json-repair implementation & unit tests
     ├── view/                  # json-view implementation & unit tests
+    ├── patch/                 # json-patch implementation & unit tests
+    ├── jsonpath/              # jsonpath-test implementation & unit tests
     ├── version.ts             # Compile-time package version synchronization
     ├── version.test.ts        # Version synchronization unit test
     └── bin/
@@ -67,7 +69,7 @@ The internal diagnostic scanner performs character-level lexical analysis when a
 ### 3.2 Security Layer (`shared/security.ts`)
 Object reconstruction, deep merging, and deep property setting are common vectors for Prototype Pollution attacks. The security layer enforces:
 - Explicit blacklisting of `__proto__`, `prototype`, and `constructor`.
-- Prototype pollution guards inside `unflattenJson`, `setPath`, and `mergeJson`.
+- Prototype pollution guards inside `unflattenJson`, `setPath`, `mergeJson`, and `applyPatch`.
 - Clean prototype-free dictionary creation (`Object.create(null)`).
 
 ### 3.3 Circular Reference & Type Transform Engine (`safe-stringify`)
@@ -99,7 +101,18 @@ Transforms complex JSON graphs into Unicode/ASCII box-drawing hierarchies (`├�
 - Traverses nested objects and arrays recursively with configurable `maxDepth` truncation.
 - Applies optional terminal ANSI color codes for keys, strings, numbers, booleans, and nulls.
 
-### 3.8 Version Synchronization & Single Source of Truth (`version.ts`)
+### 3.8 RFC 6902 JSON Patch Engine (`patch`)
+Generates and sequentially executes standard RFC 6902 patch operations (`add`, `remove`, `replace`, `move`, `copy`, `test`):
+- Uses RFC 6901 JSON Pointer escaping (`~0` for `~`, `~1` for `/`).
+- Enforces strict prototype pollution blocking across all JSON Pointer traversals.
+- Implements both throwing `applyPatch` and non-throwing diagnostic `safeApplyPatch`.
+
+### 3.9 RFC 9535 JSONPath Evaluator (`jsonpath`)
+Pure-JavaScript evaluator compiling and executing JSONPath queries without runtime code generation:
+- Supports root `$`, dot child notation (`.prop`), quoted/unquoted bracket notation (`['prop']`), index notation with negative offsets (`[-1]`), slices (`[start:end]`), wildcards (`*`), and recursive descent (`..prop`).
+- Features a compiled query caching pattern (`compileJsonPath`) for high-performance repeated queries.
+
+### 3.10 Version Synchronization & Single Source of Truth (`version.ts`)
 The package version is maintained strictly in `package.json`:
 - `tsup.config.ts` and `vitest.config.ts` dynamically read `package.json` at build and test time, injecting `__PACKAGE_VERSION__`.
 - The CLI (`src/bin/cli.ts`) and root library exports (`src/index.ts`) consume `VERSION` directly, eliminating any manual file edits when bumping versions.

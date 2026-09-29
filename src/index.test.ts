@@ -64,6 +64,19 @@ describe('package root entrypoint (src/index.ts)', () => {
     // 15. view
     expect(typeof IndexExports.renderJsonTree).toBe('function');
 
+    // 16. patch
+    expect(typeof IndexExports.createPatch).toBe('function');
+    expect(typeof IndexExports.applyPatch).toBe('function');
+    expect(typeof IndexExports.safeApplyPatch).toBe('function');
+    expect(typeof IndexExports.applyOperation).toBe('function');
+    expect(typeof IndexExports.escapeJsonPointer).toBe('function');
+    expect(typeof IndexExports.unescapeJsonPointer).toBe('function');
+
+    // 17. jsonpath
+    expect(typeof IndexExports.queryJsonPath).toBe('function');
+    expect(typeof IndexExports.testJsonPath).toBe('function');
+    expect(typeof IndexExports.compileJsonPath).toBe('function');
+
     // Shared security utilities
     expect(typeof IndexExports.isUnsafePropertyKey).toBe('function');
     expect(typeof IndexExports.hasOwn).toBe('function');

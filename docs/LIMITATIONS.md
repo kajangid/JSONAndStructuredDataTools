@@ -83,3 +83,15 @@ This document outlines architectural boundaries, trade-offs, and operational lim
 - **Terminal UTF-8 Support**: Renders Unicode box-drawing glyphs (`├──`, `└──`, `│   `). On legacy Windows consoles (e.g. standard cmd.exe with code page 437) or ASCII-only terminals, box-drawing characters may appear as replacement symbols unless UTF-8 output (`chcp 65001`) is enabled.
 - **Very Deep Structures**: For deeply nested or massive JSON documents, specify `maxDepth` to avoid flooding terminal buffers.
 
+---
+
+## 13. RFC 6902 JSON Patch (`json-patch`)
+- **Move / Copy Synthesis**: `createPatch` generates granular `add`, `remove`, and `replace` operations. Synthesis of `move` and `copy` operations from general diffs requires Longest Common Subsequence (LCS) matrix solvers which add computational overhead and are deferred until payload size benchmarks require them.
+- **Array Mutation Shift**: In accordance with RFC 6902, patches are applied sequentially. Generated patches automatically structure array removals in reverse order to ensure index stability during sequential execution.
+
+---
+
+## 14. RFC 9535 JSONPath Evaluator (`jsonpath-test`)
+- **Arbitrary Script Filters**: Supports standard selectors (`$`, `.prop`, `['prop']`, `[index]`, `[*]`, `[start:end]`, `..prop`, union `[a, b]`). Arbitrary script filter expressions (`[?(@.price < 10)]`) requiring `eval()` or sandboxed expression parsers are intentionally deferred to prevent code-injection security vulnerabilities.
+- **In-Memory Traversal**: Evaluates JSONPath queries against in-memory JavaScript structures. For streaming multi-gigabyte queries without loading into RAM, dedicated streaming token processors should be used.
+

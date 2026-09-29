@@ -34,7 +34,10 @@
     "jsonl": "dist/bin/cli.cjs",
     "json-merge": "dist/bin/cli.cjs",
     "json-repair": "dist/bin/cli.cjs",
-    "json-view": "dist/bin/cli.cjs"
+    "json-view": "dist/bin/cli.cjs",
+    "json-patch": "dist/bin/cli.cjs",
+    "jsonpath-test": "dist/bin/cli.cjs",
+    "jsonpath": "dist/bin/cli.cjs"
   },
   "exports": {
     ".": {
@@ -116,6 +119,16 @@
       "types": "./dist/view/index.d.ts",
       "import": "./dist/view/index.mjs",
       "require": "./dist/view/index.cjs"
+    },
+    "./patch": {
+      "types": "./dist/patch/index.d.ts",
+      "import": "./dist/patch/index.mjs",
+      "require": "./dist/patch/index.cjs"
+    },
+    "./jsonpath": {
+      "types": "./dist/jsonpath/index.d.ts",
+      "import": "./dist/jsonpath/index.mjs",
+      "require": "./dist/jsonpath/index.cjs"
     }
   },
   "files": [
