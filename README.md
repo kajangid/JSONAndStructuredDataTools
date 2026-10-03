@@ -1,15 +1,15 @@
 # @kjangid/json-tools
 
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.x-blue.svg)](tsconfig.json)
-[![Zero Dependencies](https://img.shields.io/badge/Dependencies-0-brightgreen.svg)](package.json)
-[![Module](https://img.shields.io/badge/Module-ESM%20%7C%20CJS-orange.svg)]()
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.x-blue.svg)](https://github.com/kajangid/JSONAndStructuredDataTools/blob/master/tsconfig.json)
+[![Zero Dependencies](https://img.shields.io/badge/Dependencies-0-brightgreen.svg)](https://www.npmjs.com/package/@kjangid/json-tools)
+[![Module](https://img.shields.io/badge/Module-ESM%20%7C%20CJS-orange.svg)](https://www.npmjs.com/package/@kjangid/json-tools)
 [![CI](https://github.com/kajangid/JSONAndStructuredDataTools/actions/workflows/ci.yml/badge.svg)](https://github.com/kajangid/JSONAndStructuredDataTools/actions/workflows/ci.yml)
 [![Release](https://github.com/kajangid/JSONAndStructuredDataTools/actions/workflows/release.yml/badge.svg)](https://github.com/kajangid/JSONAndStructuredDataTools/actions/workflows/release.yml)
 [![NPM Version](https://img.shields.io/npm/v/@kjangid/json-tools.svg)](https://www.npmjs.com/package/@kjangid/json-tools)
-[![Tests](https://img.shields.io/badge/Tests-186%20passed-success.svg)]()
-[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
-[![Node](https://img.shields.io/badge/Node-%3E%3D18.0.0-green.svg)](package.json)
-[![Coverage](https://img.shields.io/badge/coverage-96.3%25-brightgreen.svg)](docs/TESTING.md)
+[![Tests](https://img.shields.io/badge/Tests-186%20passed-success.svg)](https://github.com/kajangid/JSONAndStructuredDataTools/blob/master/docs/TESTING.md)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://github.com/kajangid/JSONAndStructuredDataTools/blob/master/LICENSE)
+[![Node](https://img.shields.io/badge/Node-%3E%3D18.0.0-green.svg)](https://nodejs.org)
+[![Coverage](https://img.shields.io/badge/coverage-96.3%25-brightgreen.svg)](https://github.com/kajangid/JSONAndStructuredDataTools/blob/master/docs/TESTING.md)
 
 A high-performance, **zero-dependency**, type-safe utility toolkit and CLI for robust JSON and structured data manipulation in Node.js, browsers, and edge environments.
 
@@ -18,37 +18,11 @@ A high-performance, **zero-dependency**, type-safe utility toolkit and CLI for r
 ## Key Features
 
 - **Zero Runtime Dependencies**: Ultra-lightweight, zero vulnerability bloat, and minimal bundle footprint.
-- **Isomorphic (Node & Browser)**: Seamlessly works across Node.js (>=18), modern browsers, Cloudflare Workers, Deno, and Bun.
+- **Isomorphic (Node & Browser)**: Works across Node.js (>=18), modern browsers, Cloudflare Workers, Deno, and Bun.
 - **Dual ESM & CommonJS**: Full support for both `import` and `require` with first-class TypeScript `.d.ts` declaration maps.
 - **Granular Subpath Imports**: Import individual tools (`@kjangid/json-tools/safe-parse`) for maximum tree-shaking efficiency.
-- **Built-in CLI Executables**: Includes both unified `json-tools <command>` and individual command aliases (`json-format`, `json-minify`, `json-validate`, `json-diff`, `json-merge`, `json-repair`, `json-view`, `json-patch`, `jsonpath-test`, `json-schema-generate`, `json-schema-validate`, etc.).
+- **Built-in CLI Executables**: Includes both unified `json-tools <command>` and individual command aliases (`json-format`, `json-minify`, `json-validate`, `json-diff`, `json-merge`, `json-repair`, `json-view`, `json-patch`, `jsonpath-test`, `json-schema-generate`, etc.).
 - **Security by Default**: Strict prototype pollution defenses against `__proto__`, `constructor`, and `prototype` exploits.
-
----
-
-## The 19 Core Utilities
-
-| Utility                   | Description                                                                                             | Primary Exports                                  |
-| :------------------------ | :------------------------------------------------------------------------------------------------------ | :----------------------------------------------- |
-| **`json-safe-parse`**     | Parse JSON without throwing exceptions; returns typed results with exact error line/column coordinates. | `safeParse`, `safeParseOrDefault`                |
-| **`json-safe-stringify`** | Stringify data safely, handling circular references, `BigInt`, `Map`, `Set`, `Error`, and `RegExp`.     | `safeStringify`                                  |
-| **`json-formatter`**      | Pretty-print JSON with custom indents, deterministic key sorting, and ANSI terminal colors.             | `formatJson`, `colorizeJson`                     |
-| **`json-minify`**         | Strip whitespace from JSON while preserving string literal spacing and high-precision numbers.          | `minifyJson`                                     |
-| **`json-validator`**      | Validate RFC 8259 JSON compliance with visual caret-pointed error code snippets.                        | `validateJson`, `isValidJson`, `assertValidJson` |
-| **`json-diff`**           | Deep structural diff between objects or JSON strings, reporting additions, removals, and changes.       | `diffJson`, `formatDiff`                         |
-| **`json-flatten`**        | Flatten deeply nested objects and arrays into dot notation.                                             | `flattenJson`                                    |
-| **`json-unflatten`**      | Reconstruct nested objects/arrays from dot notation with prototype pollution protection.                | `unflattenJson`                                  |
-| **`json-path`**           | Safely read, test, modify, and delete nested values using dot/bracket paths.                            | `getPath`, `setPath`, `hasPath`, `deletePath`    |
-| **`json-escape`**         | Safely escape string characters for embedding in JSON literals and unescape JSON strings back to raw text. | `escapeJsonString`, `unescapeJsonString`      |
-| **`json-sort-keys`**      | Recursively sort object keys alphabetically or with custom comparator for deterministic hashes and diffs. | `sortKeys`, `sortKeysJson`                  |
-| **`jsonl`**               | Parse, validate, and stringify newline-delimited JSON (JSONL/NDJSON) with line-by-line error reports.    | `parseJsonl`, `stringifyJsonl`, `formatJsonlSummary` |
-| **`json-merge`**          | Deep-merge JSON documents with configurable array strategies (`replace`, `concat`, `union`) and pollution guards. | `mergeJson`, `mergeJsonWithOptions`             |
-| **`json-repair`**         | Fix trailing commas, quotes, unquoted keys, line/block comments, and unclosed brackets.                 | `repairJson`, `safeRepairJson`                   |
-| **`json-view`**           | Render JSON data structures as Unicode/ASCII box-drawing trees with optional ANSI color highlighting.    | `renderJsonTree`                                 |
-| **`json-patch`**          | Generate and apply RFC 6902 JSON patches with JSON Pointer (`~0`, `~1`) and pollution protection.       | `createPatch`, `applyPatch`, `safeApplyPatch`    |
-| **`jsonpath-test`**       | Query and test RFC 9535 JSONPath expressions (`$`, `.prop`, `[0]`, `[*]`, `[start:end]`, `..prop`).    | `queryJsonPath`, `testJsonPath`                  |
-| **`json-schema-generate`**| Infer standard Draft-07 JSON Schema with structural typing from sample payloads.                        | `generateSchema`, `generateSchemaJson`           |
-| **`json-schema-validate`**| Validate documents against JSON Schema Draft-07 rules with precise diagnostic errors.                  | `validateSchema`, `isValidSchema`, `assertValidSchema` |
 
 ---
 
@@ -70,326 +44,124 @@ bun add @kjangid/json-tools
 
 ---
 
-## Quick Start
+## Quick Start: Common Workflows
 
-### 1. `json-safe-parse`
+### 1. Safe Parsing & Serialization (No Exceptions, BigInt & Circular Safe)
 
 ```typescript
-import { safeParse, safeParseOrDefault } from "@kjangid/json-tools/safe-parse";
+import { safeParse, safeStringify } from "@kjangid/json-tools";
 
-const result = safeParse<{ name: string }>('{"name": "Alice"}');
+// Parse without try/catch; get exact line/column coordinates on error
+const result = safeParse<{ id: number }>('{"id": 42}');
 if (result.success) {
-  console.log(result.data.name); // "Alice"
+  console.log(result.data.id); // 42
 } else {
-  console.error(`Error at line ${result.position?.line}, col ${result.position?.column}: ${result.error.message}`);
+  console.error(`Syntax error at line ${result.position?.line}, col ${result.position?.column}`);
 }
 
-// Fallback default
-const config = safeParseOrDefault("invalid json", { debug: false });
+// Handles circular references, BigInt, Map, Set, and Error objects
+const graph: any = { id: 9007199254740993n, tags: new Set(["api", "prod"]) };
+graph.self = graph;
+
+console.log(safeStringify(graph, 2));
+// Output: {"id":"9007199254740993n","tags":["api","prod"],"self":"[Circular]"}
 ```
 
-### 2. `json-safe-stringify`
+### 2. JSON Schema Generation & In-Memory Validation (Draft-07)
 
 ```typescript
-import { safeStringify } from "@kjangid/json-tools/safe-stringify";
+import { generateSchema, validateSchema, isValidSchema } from "@kjangid/json-tools";
 
-const obj: any = { name: "Graph" };
-obj.self = obj; // Circular reference
+const sample = { id: 101, name: "Gateway", active: true, tags: ["net", "v2"] };
 
-console.log(safeStringify(obj));
-// Output: {"name":"Graph","self":"[Circular]"}
+// Automatically infer Draft-07 JSON Schema from a sample payload
+const schema = generateSchema(sample, { title: "ServiceConfig", requiredAll: true });
 
-// Handles BigInt, Map, Set, Error
-const payload = {
-  id: 9007199254740993n,
-  tags: new Set(["tech", "dev"]),
-  data: new Map([["k", "v"]]),
-};
-console.log(safeStringify(payload, 2));
-```
-
-### 3. `json-formatter`
-
-```typescript
-import { formatJson } from "@kjangid/json-tools/formatter";
-
-// Deterministic key sorting (ideal for git diffs and checksums)
-const formatted = formatJson(payload, {
-  indent: 2,
-  sortKeys: true,
-  color: true, // ANSI colors for terminal display
-});
-console.log(formatted);
-```
-
-### 4. `json-minify`
-
-```typescript
-import { minifyJson } from "@kjangid/json-tools/minify";
-
-const compact = minifyJson(`{
-  "title": "Minified JSON",
-  "items": [1, 2, 3]
-}`);
-// Output: {"title":"Minified JSON","items":[1,2,3]}
-```
-
-### 5. `json-validator`
-
-```typescript
-import { validateJson, isValidJson } from "@kjangid/json-tools/validator";
-
-const result = validateJson('{\n  "age": 30,\n}');
-if (!result.valid) {
-  console.log(`Error at line ${result.error.line}, col ${result.error.column}:`);
-  console.log(result.error.snippet);
-  // 1 | {
-  // 2 |   "age": 30,
-  // 3 | }
-  //     ^
-}
-```
-
-### 6. `json-diff`
-
-```typescript
-import { diffJson, formatDiff } from "@kjangid/json-tools/diff";
-
-const diff = diffJson({ env: "dev", port: 3000, active: true }, { env: "prod", port: 8080 });
-
-console.log(diff.hasChanges); // true
-console.log(formatDiff(diff, { color: true }));
-// - active: true
-// ~ env: "dev" => "prod"
-// ~ port: 3000 => 8080
-// Summary: +0 added, -1 removed, ~2 modified (3 total)
-```
-
-### 7. `json-flatten` & `json-unflatten`
-
-```typescript
-import { flattenJson } from "@kjangid/json-tools/flatten";
-import { unflattenJson } from "@kjangid/json-tools/unflatten";
-
-const flat = flattenJson({
-  user: { profile: { name: "Alice" }, tags: ["admin", "dev"] },
-});
-// Result:
-// {
-//   "user.profile.name": "Alice",
-//   "user.tags.0": "admin",
-//   "user.tags.1": "dev"
-// }
-
-// Reconstruct with prototype pollution safety
-const original = unflattenJson(flat);
-```
-
-### 8. `json-path`
-
-```typescript
-import { getPath, setPath, hasPath, deletePath } from "@kjangid/json-tools/path";
-
-const store = { users: [{ id: 1, name: "Alice" }] };
-
-// Safe nested read
-const name = getPath(store, "users[0].name"); // "Alice"
-const fallback = getPath(store, "users[10].name", "Anonymous"); // "Anonymous"
-
-// Safe nested write (mutable or immutable)
-const updated = setPath(store, "users[0].role", "Admin", { immutable: true });
-```
-
-### 9. `json-escape`
-
-```typescript
-import { escapeJsonString, unescapeJsonString } from "@kjangid/json-tools/escape";
-
-const escaped = escapeJsonString('hello "world"\nnext line');
-// Output: hello \"world\"\nnext line
-
-const raw = unescapeJsonString(escaped);
-// Output: hello "world"
-```
-
-### 10. `json-sort-keys`
-
-```typescript
-import { sortKeys, sortKeysJson } from "@kjangid/json-tools/sort-keys";
-
-const sorted = sortKeys({ z: 1, a: 2, m: { y: 10, b: 20 } });
-// Output: { a: 2, m: { b: 20, y: 10 }, z: 1 }
-
-const json = sortKeysJson('{"z": 1, "a": 2}', { indent: 2 });
-```
-
-### 11. `jsonl` (Newline-Delimited JSON)
-
-```typescript
-import { parseJsonl, stringifyJsonl, formatJsonlSummary } from "@kjangid/json-tools/jsonl";
-
-const { records, validCount, errors } = parseJsonl('{"id": 1}\n{"id": 2}');
-const output = stringifyJsonl([{ id: 1 }, { id: 2 }]);
-const summary = formatJsonlSummary('{"id": 1}\n{"id": 2}');
-```
-
-### 12. `json-merge`
-
-```typescript
-import { mergeJson, mergeJsonWithOptions } from "@kjangid/json-tools/merge";
-
-const merged = mergeJson(
-  { env: "dev", db: { host: "localhost", port: 5432 } },
-  { env: "prod", db: { host: "db.internal" } }
-);
-// Output: { env: "prod", db: { host: "db.internal", port: 5432 } }
-
-// Array conflict resolution: 'replace' | 'concat' | 'union'
-const unionMerged = mergeJsonWithOptions(
-  { arrayMode: 'union' },
-  { tags: ['node', 'js'] },
-  { tags: ['ts', 'node'] }
-);
-// Output: { tags: ['node', 'js', 'ts'] }
-```
-
-### 13. `json-repair`
-
-```typescript
-import { repairJson, safeRepairJson } from "@kjangid/json-tools/repair";
-
-// Fixes single quotes, trailing commas, line/block comments, unquoted keys, unclosed braces
-const broken = "{ name: 'Alice', tags: ['dev',], /* comment */ }";
-const valid = repairJson(broken);
-// Output: '{\n  "name": "Alice",\n  "tags": [\n    "dev"\n  ]\n}'
-
-const result = safeRepairJson(broken);
-if (result.success) {
-  console.log(result.data); // { name: 'Alice', tags: ['dev'] }
-}
-```
-
-### 14. `json-view`
-
-```typescript
-import { renderJsonTree } from "@kjangid/json-tools/view";
-
-const tree = renderJsonTree({
-  app: "api",
-  routes: ["/users", "/health"],
-  db: { pool: 10 }
-});
-console.log(tree);
-/*
-root
-├── app: "api"
-├── routes (Array[2])
-│   ├── [0]: "/users"
-│   └── [1]: "/health"
-└── db (Object)
-    └── pool: 10
-*/
-```
-
-### 15. `json-patch` (RFC 6902 / RFC 6901)
-
-```typescript
-import { createPatch, applyPatch, safeApplyPatch } from "@kjangid/json-tools/patch";
-
-const docA = { title: "Draft", tags: ["tech"] };
-const docB = { title: "Published", tags: ["tech", "release"], version: 1 };
-
-// Generate RFC 6902 Patch
-const patch = createPatch(docA, docB);
-// Output: [
-//   { op: "replace", path: "/title", value: "Published" },
-//   { op: "add", path: "/tags/1", value: "release" },
-//   { op: "add", path: "/version", value: 1 }
-// ]
-
-// Apply patch
-const updated = applyPatch(docA, patch);
-
-// Safe application with diagnostics
-const result = safeApplyPatch(docA, [{ op: "test", path: "/version", value: 99 }]);
-if (!result.success) {
-  console.error(result.error); // "Test failed at path \"/version\"..."
-}
-```
-
-### 16. `jsonpath-test` (RFC 9535)
-
-```typescript
-import { queryJsonPath, testJsonPath } from "@kjangid/json-tools/jsonpath";
-
-const store = {
-  books: [
-    { title: "Refactoring", author: "Fowler", price: 45 },
-    { title: "Clean Code", author: "Martin", price: 40 }
-  ]
-};
-
-// Query paths, wildcards, slices, and recursive descent
-const titles = queryJsonPath(store, "$.books[*].title");
-// ["Refactoring", "Clean Code"]
-
-const allAuthors = queryJsonPath(store, "$..author");
-// ["Fowler", "Martin"]
-
-const firstBook = queryJsonPath(store, "$.books[0:1]");
-// [{ title: "Refactoring", author: "Fowler", price: 45 }]
-
-// Test presence
-const hasPrice = testJsonPath(store, "$..price"); // true
-```
-
-### 17. `json-schema-generate`
-
-```typescript
-import { generateSchema, generateSchemaJson } from "@kjangid/json-tools/schema-generate";
-
-const sample = {
-  id: 101,
-  name: "Production Gateway",
-  active: true,
-  tags: ["api", "v2"],
-};
-
-const schema = generateSchema(sample, {
-  title: "ServiceConfig",
-  requiredAll: true,
-});
-
-console.log(generateSchemaJson(sample, { indent: 2 }));
-// Emits Draft-07 compliant schema with object properties and types
-```
-
-### 18. `json-schema-validate`
-
-```typescript
-import { validateSchema, isValidSchema } from "@kjangid/json-tools/schema-validate";
-
-const schema = {
-  type: "object",
-  required: ["id", "name"],
-  properties: {
-    id: { type: "integer", minimum: 1 },
-    name: { type: "string", minLength: 3 },
-  },
-};
-
-const result = validateSchema({ id: 0, name: "API" }, schema);
-if (!result.valid) {
-  for (const err of result.errors) {
+// Validate untrusted data against schema with detailed diagnostic errors
+const validation = validateSchema({ id: "invalid", name: "Gateway" }, schema);
+if (!validation.valid) {
+  for (const err of validation.errors) {
     console.error(`${err.path}: ${err.message} (rule: ${err.rule})`);
   }
 }
 
 // Fast boolean check
-if (isValidSchema({ id: 1, name: "API" }, schema)) {
-  console.log("Payload satisfies schema!");
+if (isValidSchema(sample, schema)) {
+  console.log("Valid payload!");
 }
 ```
+
+### 3. Deep Structural Diff, Merge & RFC 6902 Patching
+
+```typescript
+import { diffJson, mergeJson, createPatch, applyPatch } from "@kjangid/json-tools";
+
+const base = { theme: "light", env: { debug: false }, tags: ["web"] };
+const update = { theme: "dark", env: { debug: true }, tags: ["api"] };
+
+// 1. Deep structural diff
+const differences = diffJson(base, update);
+
+// 2. Deep merge with union arrays
+const merged = mergeJson(base, update, { arrayStrategy: "union" });
+// tags become: ["web", "api"]
+
+// 3. RFC 6902 JSON Patch creation & application
+const patch = createPatch(base, update);
+const patched = applyPatch(base, patch);
+```
+
+### 4. Malformed JSON Repair & RFC 9535 JSONPath Querying
+
+```typescript
+import { repairJson, queryJsonPath } from "@kjangid/json-tools";
+
+// Fix trailing commas, unquoted keys, single quotes, and unclosed brackets
+const dirty = "{ name: 'Widget', items: [1, 2, 3,], // note }";
+const clean = repairJson(dirty);
+// '{"name": "Widget", "items": [1, 2, 3]}'
+
+// Query complex structures with standard RFC 9535 JSONPath
+const store = {
+  books: [
+    { title: "Refactoring", author: "Fowler", price: 45 },
+    { title: "Clean Code", author: "Martin", price: 50 },
+  ],
+};
+
+const authors = queryJsonPath(store, "$..author"); // ["Fowler", "Martin"]
+const cheapBooks = queryJsonPath(store, "$.books[0:1].title"); // ["Refactoring"]
+```
+
+---
+
+## The 19 Core Utilities
+
+All utilities can be imported from root (`@kjangid/json-tools`) or via isolated subpaths for optimal tree-shaking:
+
+| Utility | Description | Subpath Import |
+| :--- | :--- | :--- |
+| **`json-safe-parse`** | Parse JSON without throwing; returns line/column coordinates on error. | `@kjangid/json-tools/safe-parse` |
+| **`json-safe-stringify`** | Stringify handling circular refs, `BigInt`, `Map`, `Set`, `Error`, `RegExp`. | `@kjangid/json-tools/safe-stringify` |
+| **`json-formatter`** | Pretty-print JSON with custom indents, deterministic key sorting, and ANSI color. | `@kjangid/json-tools/formatter` |
+| **`json-minify`** | Strip whitespace from JSON while preserving string literal contents. | `@kjangid/json-tools/minify` |
+| **`json-validator`** | Validate RFC 8259 JSON syntax with visual caret-pointed error snippets. | `@kjangid/json-tools/validator` |
+| **`json-diff`** | Deep structural diff between objects or JSON strings. | `@kjangid/json-tools/diff` |
+| **`json-flatten`** | Flatten deeply nested objects and arrays into dot notation. | `@kjangid/json-tools/flatten` |
+| **`json-unflatten`** | Reconstruct nested objects/arrays from dot notation with prototype defense. | `@kjangid/json-tools/unflatten` |
+| **`json-path`** | Safely read, test, modify, and delete nested values via dot/bracket paths. | `@kjangid/json-tools/path` |
+| **`json-escape`** | Safely escape string characters for embedding in JSON literals and unescape text. | `@kjangid/json-tools/escape` |
+| **`json-sort-keys`** | Recursively sort object keys alphabetically or via custom comparator. | `@kjangid/json-tools/sort-keys` |
+| **`jsonl`** | Parse, validate, and stringify newline-delimited JSON (JSONL/NDJSON). | `@kjangid/json-tools/jsonl` |
+| **`json-merge`** | Deep-merge JSON documents with array strategies (`replace`, `concat`, `union`). | `@kjangid/json-tools/merge` |
+| **`json-repair`** | Heuristically fix trailing commas, quotes, bare keys, comments, brackets. | `@kjangid/json-tools/repair` |
+| **`json-view`** | Render JSON data structures as Unicode/ASCII box-drawing trees. | `@kjangid/json-tools/view` |
+| **`json-patch`** | Generate and apply RFC 6902 JSON patches with JSON Pointer (`~0`, `~1`). | `@kjangid/json-tools/patch` |
+| **`jsonpath-test`** | Query and test RFC 9535 JSONPath expressions (`$`, `.prop`, `[*]`, `[0:1]`, `..`). | `@kjangid/json-tools/jsonpath` |
+| **`json-schema-generate`** | Infer standard Draft-07 JSON Schema with structural typing from sample payloads. | `@kjangid/json-tools/schema-generate` |
+| **`json-schema-validate`** | Validate documents against JSON Schema Draft-07 rules with diagnostic errors. | `@kjangid/json-tools/schema-validate` |
+
+See [docs/FEATURES.md](https://github.com/kajangid/JSONAndStructuredDataTools/blob/master/docs/FEATURES.md) for complete API signatures, options, and full method documentation.
 
 ---
 
@@ -398,152 +170,79 @@ if (isValidSchema({ id: 1, name: "API" }, schema)) {
 Run via `npx` or install globally (`npm install -g @kjangid/json-tools`):
 
 ```bash
-# Pretty-print
+# Unified CLI runner
 json-tools format data.json --indent=4 --sort-keys --color
-json-format data.json
-
-# Minify
 json-tools minify data.json > minified.json
-json-minify data.json
-
-# Validate
 json-tools validate data.json
-json-validate data.json
-
-# Structural Diff
 json-tools diff config.dev.json config.prod.json --color
-json-diff config.dev.json config.prod.json
-
-# Flatten & Unflatten
-json-tools flatten nested.json
-json-tools unflatten flat.json
-
-# Query Path
-json-tools path data.json "users[0].profile.name"
-
-# Escape & Unescape
-json-tools escape text.txt
-json-tools unescape escaped.txt
-
-# Sort Keys
-json-tools sort-keys data.json --indent=2
-json-sort-keys data.json
-
-# JSONL Inspection
-json-tools jsonl data.jsonl --summary
-jsonl data.jsonl --limit=10
-
-# Deep Merge
 json-tools merge base.json override.json --arrays=union
-json-merge base.json override.json
-
-# Repair Malformed JSON
 json-tools repair broken.json > fixed.json
-json-repair broken.json
-
-# Visual ASCII Tree View
 json-tools view data.json --depth=3 --color
-json-view data.json
-
-# RFC 6902 JSON Patch
 json-tools patch create base.json target.json > patch.json
-json-patch apply base.json patch.json
-
-# RFC 9535 JSONPath Query & Test
 json-tools jsonpath store.json "$.books[*].title"
-jsonpath-test store.json "$.books[0]" --test
-
-# Infer Draft-07 JSON Schema
 json-tools schema-gen sample.json --title="User" > schema.json
-json-schema-generate sample.json
-
-# Validate Against JSON Schema
 json-tools schema-val schema.json data.json
+
+# Direct command aliases
+json-format data.json
+json-minify data.json
+json-validate data.json
+json-diff doc1.json doc2.json
+json-merge base.json patch.json
+json-repair broken.json
+json-view data.json
+json-patch apply base.json patch.json
+jsonpath-test store.json "$.books[0]" --test
+json-schema-generate sample.json
 json-schema-validate schema.json data.json
 
-# Stdin Piping
+# Stdin piping
 cat data.json | json-tools minify
 cat invalid.json | json-tools validate
-
-# Print Version
-json-tools --version
-json-tools -v
 ```
 
 ---
 
-## Detailed Documentation
+## Limitations & Operational Boundaries
 
-Dive deeper into our dedicated architecture and operational sub-documents:
+To maintain zero runtime dependencies and predictable performance, the library operates within explicit boundaries:
 
-- [Architecture & Design Decisions](docs/ARCHITECTURE.md)
-- [Installation & Runtime Support](docs/INSTALLATION.md)
-- [Features & API Reference](docs/FEATURES.md)
-- [Limitations & Operational Boundaries](docs/LIMITATIONS.md)
-- [Future Improvements & Deferred Enhancements](docs/FUTURE_IMPROVEMENTS.md)
-- [Testing Strategy & Test Cases](docs/TESTING.md)
-- [Deployment, Version Bumping & CI/CD](docs/DEPLOYMENT.md)
+1. **In-Memory Payloads**: Optimized for microservice payloads, API requests, configuration files, and state trees up to tens of megabytes. For multi-gigabyte files exceeding V8 heap RAM (>1.5 GB), use a streaming token parser.
+2. **BigInt 64-bit Format**: To prevent silent IEEE 754 precision loss, `safeStringify` serializes BigInts as string literals (e.g. `"9007199254740993n"`).
+3. **Prototype Pollution Protection**: Dangerous keys (`__proto__`, `constructor`, `prototype`) are dropped and blocked from property traversal and unflattening.
+4. **JSON Schema Scope**: In-memory Draft-07 rule validator. Remote `$ref` network HTTP dereferencing is deliberately excluded to prevent SSRF vulnerabilities and network latency.
+5. **JSONPath Script Predicates**: RFC 9535 structural queries (`$`, `.prop`, `[*]`, slices, `..`) are supported. Arbitrary script execution expressions (`[?(@.price < 10)]`) requiring `eval()` are intentionally omitted to maintain strict security.
 
----
-
-## NPM Scripts
-
-| Script                  | Command                 | Purpose                                   |
-| :---------------------- | :---------------------- | :---------------------------------------- |
-| `npm run build`         | `tsup`                  | Build ESM, CommonJS, and DTS bundles      |
-| `npm test`              | `vitest run`            | Run the complete 186-test unit test suite |
-| `npm run test:watch`    | `vitest`                | Run tests in interactive watch mode       |
-| `npm run test:coverage` | `vitest run --coverage` | Generate V8 coverage report               |
-| `npm run typecheck`     | `tsc --noEmit`          | Strict static type validation             |
-| `npm run bump:patch`    | `npm version patch`     | Bump patch version and create Git tag     |
-| `npm run bump:minor`    | `npm version minor`     | Bump minor version and create Git tag     |
-| `npm run bump:major`    | `npm version major`     | Bump major version and create Git tag     |
-| `npm run publish:dry`   | `npm publish --dry-run` | Inspect packaged tarball before shipping  |
+See [docs/LIMITATIONS.md](https://github.com/kajangid/JSONAndStructuredDataTools/blob/master/docs/LIMITATIONS.md) for full details on edge cases and design decisions.
 
 ---
 
-## CI/CD & Automated Publishing
+## Comprehensive Documentation
 
-This repository uses a production-ready, zero-token CI/CD pipeline powered by **GitHub Actions** and **npm Trusted Publishing (OIDC)**.
+- [Features & Full API Reference](https://github.com/kajangid/JSONAndStructuredDataTools/blob/master/docs/FEATURES.md)
+- [Architecture & Design Decisions](https://github.com/kajangid/JSONAndStructuredDataTools/blob/master/docs/ARCHITECTURE.md)
+- [Installation & Subpath Imports Guide](https://github.com/kajangid/JSONAndStructuredDataTools/blob/master/docs/INSTALLATION.md)
+- [Limitations & Operational Boundaries](https://github.com/kajangid/JSONAndStructuredDataTools/blob/master/docs/LIMITATIONS.md)
+- [Future Improvements & Roadmap](https://github.com/kajangid/JSONAndStructuredDataTools/blob/master/docs/FUTURE_IMPROVEMENTS.md)
+- [Testing Strategy & Test Matrix](https://github.com/kajangid/JSONAndStructuredDataTools/blob/master/docs/TESTING.md)
+- [Deployment & Release Guide](https://github.com/kajangid/JSONAndStructuredDataTools/blob/master/docs/DEPLOYMENT.md)
 
-### 1. Continuous Integration (CI)
+---
 
-On every pull request and push to `main`/`master`, the [CI workflow](.github/workflows/ci.yml) runs:
+## Contributing
 
-1. `npm ci` — Deterministic clean dependency install.
-2. `npm run lint` — Strict TypeScript typechecking (`tsc --noEmit`).
-3. `npm test` — Complete test suite execution (`vitest run`).
-4. `npm run build` — Compilation of ESM, CJS, and DTS bundles.
-
-### 2. Automated Release & CD (OIDC Trusted Publishing)
-
-Releases are completely automated with zero long-lived static secrets (no `NPM_TOKEN`):
-
-1. **Bump version and push tag**:
-   ```bash
-   npm version patch   # or minor / major
-   git push --follow-tags
-   ```
-2. **Release Workflow** ([`.github/workflows/release.yml`](.github/workflows/release.yml)):
-   - Checks out the tagged commit and installs dependencies.
-   - Verifies that the Git tag (`vX.Y.Z`) matches the `package.json` version.
-   - Runs full lint, tests, and compilation.
-   - Publishes to npm using OpenID Connect (OIDC) token exchange with `--provenance`.
-   - Creates a GitHub Release with auto-generated release notes using `gh release create`.
-
-See [Deployment Guide](docs/DEPLOYMENT.md) for one-time npm Trusted Publisher setup instructions.
+Contributions, bug reports, and suggestions are welcome! Please check our [Contributing Guide](https://github.com/kajangid/JSONAndStructuredDataTools/blob/master/CONTRIBUTING.md) for setup instructions, coding conventions, and PR requirements.
 
 ---
 
 ## Security
 
-All path accessors and unflattening operations contain strict guards against prototype pollution attacks, preventing unwanted mutation of `Object.prototype`:
-
-- `__proto__` is dropped and blocked from property traversal.
+All traversal, path setting, unflattening, and deep merging functions strictly guard against prototype pollution attacks:
+- `__proto__` is dropped and blocked from object traversal.
 - `constructor` and `prototype` property mutations are safely rejected.
 
 ---
 
 ## License
 
-[MIT](LICENSE) © 2026 Karan Jangid
+[MIT](https://github.com/kajangid/JSONAndStructuredDataTools/blob/master/LICENSE) © 2026 Karan Jangid
